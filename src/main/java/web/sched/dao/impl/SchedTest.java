@@ -9,10 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.util.DsConstant;
 import web.sched.vo.Sched;
 
 public class SchedTest {
 	public static void main(String[] args) throws IOException {
+		DsConstant ds =  new DsConstant();
+	
 		//實例化SchedDaoImpl
 		SchedDaoImpl schedDaoImpl = new SchedDaoImpl();
 		//SELECT ALL

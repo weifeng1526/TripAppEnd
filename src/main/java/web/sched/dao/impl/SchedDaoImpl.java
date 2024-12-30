@@ -10,11 +10,15 @@ import java.util.List;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import core.util.DsConstant;
+import core.util.JdbcConstant;
 import web.sched.dao.SchedDao;
 import web.sched.vo.Sched;
+import core.util.*;
 
 public class SchedDaoImpl implements SchedDao {
-	private HikariDataSource ds;
+	DsConstant dsConstant = new DsConstant();
+	HikariDataSource ds = dsConstant.DsConfig();
 	@Override
 	public int insert(Sched sched) {
 		String sql = 

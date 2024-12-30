@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-	<Resource name="jdbc/example" type="javax.sql.DataSource"
+	<Resource name="jdbc/trip" type="javax.sql.DataSource"
 		driverClassName="com.mysql.cj.jdbc.Driver"
 		jdbcUrl="jdbc:mysql://localhost:3306/trip"
 		username="root"
