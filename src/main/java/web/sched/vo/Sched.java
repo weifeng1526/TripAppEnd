@@ -8,10 +8,11 @@ public class Sched {
     private int schState;            
     private String schName;          
     private String schCon;           
-    private Date schStart;           
-    private Date schEnd;             
+    private String schStart;           
+    private String schEnd;             
     private String schCur;           
     private byte[] schPic;
+    private String schLastEdit;
 
     // Getter & Setter
     public int getSchNo() {
@@ -54,21 +55,6 @@ public class Sched {
         this.schCon = schCon;
     }
 
-    public Date getSchStart() {
-        return schStart;
-    }
-
-    public void setSchStart(Date schStart) {
-        this.schStart = schStart;
-    }
-
-    public Date getSchEnd() {
-        return schEnd;
-    }
-
-    public void setSchEnd(Date schEnd) {
-        this.schEnd = schEnd;
-    }
 
     public String getSchCur() {
         return schCur;
@@ -85,5 +71,29 @@ public class Sched {
     public void setSchPic(byte[] schPic) {
         this.schPic = schPic;
     }
+
+	public String getSchStart() {
+		return schStart;
+	}
+
+	public void setSchStart(String schStart) {
+		this.schStart = schStart;
+	}
+
+	public String getSchEnd() {
+		return schEnd;
+	}
+
+	public void setSchEnd(String schEnd) {
+		this.schEnd = schEnd;
+	}
+
+	public String getSchLastEdit() {
+		return schLastEdit;
+	}
+
+	public void setSchLastEdit(String schLastEdit) {
+		this.schLastEdit = schLastEdit;
+	}
 }
 

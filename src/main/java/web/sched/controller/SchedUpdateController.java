@@ -22,7 +22,7 @@ public class SchedUpdateController extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json; charset=UTF-8");
 		SchedDaoImpl schedDaoImpl = new SchedDaoImpl();
-		Gson gson= new GsonBuilder().setDateFormat("yy-MM-dd").create();
+		Gson gson= new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 		Sched sched = gson.fromJson(req.getReader(), Sched.class);
 		int isUpdated = schedDaoImpl.update(sched);
 		if(isUpdated > 0) {

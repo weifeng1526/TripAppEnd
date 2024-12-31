@@ -9,13 +9,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.util.DsConstant;
 import web.sched.vo.Sched;
 
 public class SchedTest {
 	public static void main(String[] args) throws IOException {
-		DsConstant ds =  new DsConstant();
-	
 		//實例化SchedDaoImpl
 		SchedDaoImpl schedDaoImpl = new SchedDaoImpl();
 		//SELECT ALL
@@ -30,14 +27,15 @@ public class SchedTest {
 		sched.setSchState(0);
 		sched.setSchName("測試名稱");
 		sched.setSchCon("測試國家");
-		sched.setSchStart(Date.valueOf("2000-01-01"));
-		sched.setSchEnd(Date.valueOf("2000-01-01"));
+		sched.setSchStart("2000-01-01");
+		sched.setSchEnd("2000-01-01");
 		sched.setSchCur("測試幣別");
 		sched.setSchPic(null);
+		sched.setSchLastEdit("2020-01-01T11:00:00");
 		int isUpdated = schedDaoImpl.insert(sched);
 		System.out.println(isUpdated);
 		//SELECT BY NO
-		sched = schedDaoImpl.selectById(6);
+		sched = schedDaoImpl.selectById(1);
 		System.out.println(sched.getSchNo());
 //		//UPDATE
 		sched.setSchState(2);
