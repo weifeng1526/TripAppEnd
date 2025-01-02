@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,15 +28,19 @@ public class SchedGetAllController extends HttpServlet {
 		resp.setContentType("application/json; charset=UTF-8");
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 		List<Sched> allSched = new ArrayList<>();
-		
-		SchedDaoImpl schedDaoImpl = new SchedDaoImpl();
-		allSched = schedDaoImpl.selectAll();
-	
-		if(!allSched.isEmpty()) {
-			System.out.printf("GET: Sched表總共%d筆資料\r\n", allSched.size());
-		} else {
-			System.out.println("GET: Sched表沒有資料\r\n");
+		SchedDaoImpl schedDaoImpl;
+		try {
+			schedDaoImpl = new SchedDaoImpl();
+			allSched = schedDaoImpl.selectAll();
+			if (!allSched.isEmpty()) {
+				System.out.printf("GET: Sched表總共%d筆資料\r\n", allSched.size());
+			} else {
+				System.out.println("GET: Sched表沒有資料\r\n");
+				resp.setStatus(resp.SC_NO_CONTENT);
+			}
+			resp.getWriter().write(gson.toJson(allSched));
+		} catch (NamingException e) {
+			e.printStackTrace();
 		}
-		resp.getWriter().write(gson.toJson(allSched));
 	}
 }
