@@ -17,7 +17,7 @@ public class SchedDaoImpl implements SchedDao {
 	private DataSource ds;
 
     public SchedDaoImpl() throws NamingException {
-        ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/trip");
+        ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/tripapp");
     }
 
     @Override

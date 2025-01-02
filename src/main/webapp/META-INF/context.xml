@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-	<Resource name="jdbc/trip" type="javax.sql.DataSource"
+	<Resource name="jdbc/tripapp" type="javax.sql.DataSource"
 		driverClassName="com.mysql.cj.jdbc.Driver"
-		jdbcUrl="jdbc:mysql://localhost:3306/trip"
+		jdbcUrl="jdbc:mysql://localhost:3306/tripapp"
 		username="root"
 		password="123456"
 		factory="com.zaxxer.hikari.HikariJNDIFactory"
