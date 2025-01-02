@@ -2,6 +2,7 @@ package web.sched.controller;
 
 import java.io.IOException;
 
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,22 +16,32 @@ import web.sched.dao.impl.SchedDaoImpl;
 import web.sched.vo.Sched;
 
 @WebServlet("/sched/update")
-public class SchedUpdateController extends HttpServlet{
+public class SchedUpdateController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json; charset=UTF-8");
-		SchedDaoImpl schedDaoImpl = new SchedDaoImpl();
-		Gson gson= new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		Sched sched = gson.fromJson(req.getReader(), Sched.class);
-		int isUpdated = schedDaoImpl.update(sched);
-		if(isUpdated > 0) {
-			System.out.println("PUT: Sched更新成功: " + sched.getSchNo());
-		} else {
-			System.out.println("PUT: Sched更新失敗: " + sched.getSchNo());
+		SchedDaoImpl schedDaoImpl;
+		try {
+			schedDaoImpl = new SchedDaoImpl();
+			Gson gson= new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			Sched sched = gson.fromJson(req.getReader(), Sched.class);
+			int isUpdated = schedDaoImpl.update(sched);
+			
+			if(isUpdated > 0) {
+				System.out.println("PUT: Sched更新成功: " + sched.getSchNo());
+				resp.setStatus(resp.SC_OK);
+			} else {
+				System.out.println("PUT: Sched更新失敗: " + sched.getSchNo());
+				resp.setStatus(resp.SC_BAD_REQUEST);
+			}
+			resp.getWriter().write(gson.toJson(sched));
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		resp.getWriter().write(gson.toJson(sched));
 	}
-	
+
 }
