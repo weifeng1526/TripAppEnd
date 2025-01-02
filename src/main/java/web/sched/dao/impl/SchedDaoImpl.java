@@ -6,15 +6,19 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zaxxer.hikari.HikariDataSource;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
-import core.util.DsConstant;
 import web.sched.dao.SchedDao;
 import web.sched.vo.Sched;
 
 public class SchedDaoImpl implements SchedDao {
-    DsConstant dsConstant = new DsConstant();
-    HikariDataSource ds = dsConstant.DsConfig();
+	private DataSource ds;
+
+    public SchedDaoImpl() throws NamingException {
+        ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/tripapp");
+    }
 
     @Override
     public int insert(Sched sched) {
