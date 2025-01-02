@@ -47,18 +47,15 @@ public class TripMemberDaoImpl implements TripMemberDao{
 	public int save(TripMember member) {
 		String sql = 
 				"insert into MEMBER"
-				+ "(MEM_NO, MEM_EMAIL, MEM_NAME, MEM_PW, MEM_STA, MEM_ICON) "
-				+ "values(?, ?, ?, ?, ?, ?)";
+				+ "(MEM_EMAIL, MEM_NAME, MEM_PW) "
+				+ "values(?, ?, ?)";
 		try (
 				Connection conn = ds.getConnection(); 
 				PreparedStatement pstmt = conn.prepareStatement(sql)
 			){
-			pstmt.setInt(1, member.getMemNo());
-			pstmt.setString(2, member.getMemEmail());
-			pstmt.setString(3, member.getMemName());
-			pstmt.setString(4, member.getMemPw());
-			pstmt.setByte(5, member.getMemSta());
-			pstmt.setBytes(6, member.getMemIcon());
+			pstmt.setString(1, member.getMemEmail());
+			pstmt.setString(2, member.getMemName());
+			pstmt.setString(3, member.getMemPw());
 			return pstmt.executeUpdate();
 			}
 		catch (Exception e) {
