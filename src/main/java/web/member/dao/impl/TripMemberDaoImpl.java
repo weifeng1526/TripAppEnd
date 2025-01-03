@@ -15,7 +15,7 @@ public class TripMemberDaoImpl implements TripMemberDao{
 	private DataSource ds;
 	
 	public TripMemberDaoImpl() throws NamingException {
-		ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/trip");
+		ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/tripapp");
 	}
 
 	@Override
