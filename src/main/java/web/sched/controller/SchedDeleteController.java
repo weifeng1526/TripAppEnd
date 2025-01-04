@@ -14,7 +14,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import web.sched.dao.impl.SchedDaoImpl;
+import web.sched.vo.DeleteResult;
 import web.sched.vo.Sched;
+
 
 @WebServlet("/sched/delete")
 public class SchedDeleteController extends HttpServlet{
@@ -29,17 +31,18 @@ public class SchedDeleteController extends HttpServlet{
 			schedDaoImpl = new SchedDaoImpl();
 			Gson gson= new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Sched sched = gson.fromJson(req.getReader(), Sched.class);
-			JsonObject jsonObject = new JsonObject();
+			DeleteResult result = new DeleteResult();
 			int id = Integer.parseInt(req.getParameter("id"));
 			int isDeleted = schedDaoImpl.deleteById(id);
 			if(isDeleted > 0) {
 				System.out.println("DELETE: Sched刪除成功");
-				jsonObject.addProperty("isDelete", true);
+				result.setMessage("DELETE: Sched刪除成功");
+				result.setSucesses(true);
 			} else {
-				System.out.println("DELETE: Sched刪除失敗");
-				jsonObject.addProperty("isDelete", false);
+				result.setMessage("DELETE: Sched刪除失敗");
+				result.setSucesses(false);
 			}
-			resp.getWriter().write(gson.toJson(jsonObject));
+			resp.getWriter().write(gson.toJson(result));
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

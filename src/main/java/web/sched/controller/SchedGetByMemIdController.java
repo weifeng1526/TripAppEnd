@@ -18,7 +18,7 @@ import com.google.gson.GsonBuilder;
 import web.sched.dao.impl.SchedDaoImpl;
 import web.sched.vo.Sched;
 
-@WebServlet("/sched/get_all")
+@WebServlet("/sched/get_all/mem_id")
 public class SchedGetByMemIdController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

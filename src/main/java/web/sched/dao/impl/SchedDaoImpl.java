@@ -164,4 +164,33 @@ public class SchedDaoImpl implements SchedDao {
         }
         return -1;
     }
+
+	@Override
+	public List<Sched> selectByMemId(int id) {
+		String sql = "SELECT * FROM sched WHERE mem_no = ?";
+		List<Sched> list = new ArrayList<Sched>();
+		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			pstmt.setInt(1, id);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					Sched sched = new Sched();
+					sched.setSchNo(rs.getInt(1));
+					sched.setMemNo(rs.getInt(2));
+					sched.setSchState(rs.getInt(3));
+					sched.setSchName(rs.getString(4));
+					sched.setSchCon(rs.getString(5));
+					sched.setSchStart(rs.getString(6));
+					sched.setSchEnd(rs.getString(7));
+					sched.setSchCur(rs.getString(8));
+					sched.setSchPic(rs.getBytes(9));
+					sched.setSchLastEdit(rs.getString(10)); // 從 ResultSet 中取值
+					list.add(sched);
+				}
+				return list;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

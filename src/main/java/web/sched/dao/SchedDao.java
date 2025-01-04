@@ -15,4 +15,6 @@ public interface SchedDao {
 	int update(Sched sched);
 	
 	int deleteById(int id);
+	
+	List<Sched> selectByMemId(int id);
 }
