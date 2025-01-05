@@ -19,7 +19,7 @@ public class TripMemberServiceImpl implements TripMemberService{
 		
 		String nickname = member.getMemName();
 		if (nickname == null || nickname.length()<1 || nickname.length()>30) {
-			return "密碼長度必須在1至30個字元之間";
+			return "暱稱必須在1至30個字元之間";
 		}
 		
 		String email = member.getMemEmail();
@@ -47,6 +47,21 @@ public class TripMemberServiceImpl implements TripMemberService{
 		} else {
 			return "註冊失敗";			
 		}
+	}
+
+	@Override
+	public TripMember login(TripMember member) {
+		String memname = member.getMemEmail();
+		if (memname == null || memname.isEmpty()) {
+			return null;
+		}
+
+		String password = member.getMemPw();
+		if (password == null || password.isEmpty()) {
+			return null;
+		}
+		
+		return memberDao.selectByMemEmailAndMemPw(member) ;
 	}
 
 }

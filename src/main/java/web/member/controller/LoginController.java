@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -15,8 +16,8 @@ import web.member.service.impl.TripMemberServiceImpl;
 import web.member.vo.MemberResult;
 import web.member.vo.TripMember;
 
-@WebServlet("/member/signup")
-public class TripMemberController extends HttpServlet {
+@WebServlet("/member/login")
+public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -24,21 +25,37 @@ public class TripMemberController extends HttpServlet {
 		Gson gson = new Gson();
 		TripMember member = gson.fromJson(req.getReader(), TripMember.class);
 		MemberResult result = new MemberResult();
+		System.out.println("doPost");
 
-		if (member == null) {
-			result.setMessage("請將會員資料填寫完整");
+		if (member == null || member.getMemEmail() == null || member.getMemPw() == null) {
+			System.out.println("null");
+			result.setMessage("請填寫信箱密碼");
 			result.setSucess(false);
 		} else {
 			try {
 				TripMemberService sevice = new TripMemberServiceImpl();
-				String message = sevice.signup(member);
-				result.setMessage(message);
-				result.setSucess(message == null);
+				member = sevice.login(member);
+				if (member != null) {
+					System.out.println("not Null");
+					if (req.getSession(false) != null) {
+						req.changeSessionId();
+					}
+					HttpSession session = req.getSession();
+					session.setAttribute("member", member);
+					System.out.println(member);
+					result.setSucess(true);
+					resp.getWriter().write(gson.toJson(result));
+				} else {
+					System.out.println("信箱或密碼錯誤");
+					result.setSucess(false);
+					result.setMessage("信箱或密碼錯誤");
+					String json = gson.toJson(result);
+					resp.getWriter().write(json);
+				}
 			} catch (Exception e) {
+				System.out.println(e.getMessage());
 				e.printStackTrace();
 			}
 		}
-		String json = gson.toJson(result);
-		resp.getWriter().write(json);
 	}
 }

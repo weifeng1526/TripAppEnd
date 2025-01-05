@@ -34,7 +34,7 @@ public class TripMemberDaoImpl implements TripMemberDao{
 					member.setMemName(rs.getString("MEM_NAME"));
 					member.setMemPw(rs.getString("MEM_PW"));
 					member.setMemSta(rs.getByte((byte)1));
-					member.setMemIcon(rs.getBytes(null));
+					member.setMemIcon(rs.getString(null));
 					return member;
 				}
 		} catch (Exception e) {
@@ -62,5 +62,33 @@ public class TripMemberDaoImpl implements TripMemberDao{
 			e.printStackTrace();
 		}
 		return -1;
+	}
+
+	@Override
+	public TripMember selectByMemEmailAndMemPw(TripMember member) {
+		String sql = "select * from MEMBER where MEM_EMAIL = ? and MEM_PW = ?";
+		try (
+				Connection conn = ds.getConnection(); 
+				PreparedStatement pstmt = conn.prepareStatement(sql)
+			) {
+			pstmt.setString(1, member.getMemEmail());
+			pstmt.setString(2, member.getMemPw());
+			
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					member = new TripMember();
+					member.setMemNo(rs.getInt("MEM_NO"));
+					member.setMemEmail(rs.getString("MEM_EMAIL"));
+					member.setMemName(rs.getString("MEM_NAME"));
+					member.setMemPw(rs.getString("MEM_PW"));
+					member.setMemSta(rs.getByte("MEM_STA"));
+					member.setMemIcon(rs.getString("MEM_ICON"));
+					return member;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

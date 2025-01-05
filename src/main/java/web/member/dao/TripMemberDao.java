@@ -6,4 +6,6 @@ public interface TripMemberDao {
 	int save(TripMember member);
 	
 	TripMember selectByEmail(String email);
+
+	TripMember selectByMemEmailAndMemPw(TripMember member);
 }

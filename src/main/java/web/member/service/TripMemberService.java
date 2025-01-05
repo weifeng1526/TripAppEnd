@@ -6,4 +6,6 @@ public interface TripMemberService {
 	
 	String signup(TripMember member);
 
+	TripMember login(TripMember member);
+
 }
