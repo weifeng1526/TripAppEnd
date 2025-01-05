@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 
 import web.map.service.MapService;
 import web.map.service.impl.MapServiceImpl;
+
 import web.map.vo.Map;
 
 @WebServlet("/map/place")
@@ -24,10 +25,11 @@ public class MapPlaceController extends HttpServlet {
 		Gson gson = new Gson();
 		Map map = gson.fromJson(req.getReader(), Map.class);
 		String address = map.getPoiAdd();
+		int addPlanNumber = map.getSchNo();
 		Map selectPlace = new Map();
 		try {
 			MapService service = new MapServiceImpl();
-			selectPlace = service.placeinfoaddcheck(map, address);
+			selectPlace = service.placeinfoaddcheck(map, address,addPlanNumber);
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}

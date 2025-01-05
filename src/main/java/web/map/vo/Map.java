@@ -6,6 +6,7 @@ import java.sql.Time;
 import lombok.Data;
 @Data
 public class Map {
+	private Integer schNo;
 	private Integer poiNo;
     private String poiAdd;
     private String poiName;

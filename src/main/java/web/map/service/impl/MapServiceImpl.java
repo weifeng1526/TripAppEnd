@@ -5,6 +5,7 @@ import javax.naming.NamingException;
 import web.map.dao.MapDao;
 import web.map.dao.impl.MapDaoImpl;
 import web.map.service.MapService;
+
 import web.map.vo.Map;
 
 public class MapServiceImpl implements MapService {
@@ -15,13 +16,24 @@ public class MapServiceImpl implements MapService {
 	}
 
 	@Override
-	public Map placeinfoaddcheck(Map map, String address) {
+	public Map placeinfoaddcheck(Map map, String address,int addPlanNumber) {
 		if (!mapDao.checkPlace(address)) {
-			mapDao.insert(map);
-			return map;
+			int addPlace=mapDao.insert(map);
+			
+			
+			if (addPlace>0) {
+				mapDao.inseartPlan(mapDao.search(address),addPlanNumber);
+			}
+			return mapDao.search(address);
 		} else {
+			
+				mapDao.inseartPlan(mapDao.search(address),addPlanNumber);
+			
+		}
 			return mapDao.search(address);
 		}
+			
+		
+
 	}
 
-}
