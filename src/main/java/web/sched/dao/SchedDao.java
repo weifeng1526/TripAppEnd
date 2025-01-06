@@ -8,6 +8,8 @@ public interface SchedDao {
 	
 	List<Sched> selectAll();
 
+	List<Sched> selectByContry(String contry);
+	
 	int insert(Sched sched);
 
 	Sched selectById(Integer Id);

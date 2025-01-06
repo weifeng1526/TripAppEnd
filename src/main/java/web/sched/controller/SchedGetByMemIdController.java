@@ -27,19 +27,21 @@ public class SchedGetByMemIdController extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json; charset=UTF-8");
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		Integer getId = Integer.parseInt(req.getParameter("id"));
+		int getId = Integer.parseInt(req.getParameter("id"));
 		SchedDaoImpl schedDaoImpl;
 		List<Sched> list = new ArrayList<>();
 		try {
 			schedDaoImpl = new SchedDaoImpl();
 			list = schedDaoImpl.selectByMemId(getId);
-			if (list != null && !list.isEmpty())
-				resp.getWriter().write(gson.toJson(list));
-			else {
-				getId = 0;
-				resp.getWriter().write(gson.toJson(getId));
-				resp.setStatus(resp.SC_NO_CONTENT);
+			if (list != null && !list.isEmpty()) {
+				System.out.printf("GET: ok");
+				System.out.println();
 			}
+			else {
+				System.out.printf("GET: fail %d", getId);
+				System.out.println();
+			}
+			resp.getWriter().write(gson.toJson(list));
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
