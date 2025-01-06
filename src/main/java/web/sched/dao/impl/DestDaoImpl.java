@@ -154,4 +154,33 @@ public class DestDaoImpl implements DestDao {
 		}
 		return 0;
 	}
+	//會員編號-1 行程編號n = 範本 
+	@Override
+	public List<Dest> selectByMemIdAndSchId(int memId, int schId) {
+		String sql = "SELECT d.* FROM dest d JOIN sched s ON d.sch_no = s.sch_no WHERE s.mem_no = ? && d.sch_no = ?";
+		List<Dest> list = new ArrayList<Dest>();
+		try (Connection connection = ds.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql);) {
+			pstmt.setInt(1, memId);
+			pstmt.setInt(2, schId);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Dest dest = new Dest();
+				dest.setDstNo(rs.getInt(1));
+				dest.setSchNo(rs.getInt(2));
+				dest.setPoiNo(rs.getInt(3));
+				dest.setDstName(rs.getString(4));
+				dest.setDstAddr(rs.getString(5));
+				dest.setDstPic(rs.getBytes(6));
+				dest.setDstDep(rs.getString(7));
+				dest.setDstDate(rs.getString(8));
+				dest.setDstStart(rs.getString(9));
+				dest.setDstEnd(rs.getString(10));
+				dest.setDstInr(rs.getString(11));
+				list.add(dest);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }
