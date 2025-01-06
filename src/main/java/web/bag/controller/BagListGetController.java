@@ -12,22 +12,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import web.bag.dao.ItemDao;
-import web.bag.dao.impl.ItemDaoImpl;
-import web.bag.vo.Item;
+import web.bag.dao.BagListDao;
+import web.bag.dao.impl.BagListDaoImpl;
+import web.bag.vo.BagList;
 
-@WebServlet("/item/get")
-public class ItemGetController extends HttpServlet {
+@WebServlet("/baglist/get")
+public class BagListGetController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
 		try {
-			ItemDao dao = new ItemDaoImpl();
-            List<List<Item>> groupedItems = dao.selectItemsGroupedByType();
-		    Gson gson = new Gson();
-		    resp.getWriter().write(gson.toJson(groupedItems));
+			BagListDao dao = new BagListDaoImpl();
+			List<BagList> bagLists = dao.selectAllbags();
+			Gson gson = new Gson();
+			resp.getWriter().write(gson.toJson(bagLists));
 		} catch (NamingException e) {
 			resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();

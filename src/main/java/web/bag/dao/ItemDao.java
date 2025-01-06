@@ -20,4 +20,7 @@ public interface ItemDao {
     // 刪除物品 (如果需要)
     boolean deleteItem(Integer itemno);
 
+
+	List<List<Item>> selectItemsGroupedByType();
+
 }

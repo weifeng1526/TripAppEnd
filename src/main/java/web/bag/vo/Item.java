@@ -8,3 +8,4 @@ public class Item {
 	private String itemName; // 物品名稱
 	private int itemType; // 物品類型
 }
+
