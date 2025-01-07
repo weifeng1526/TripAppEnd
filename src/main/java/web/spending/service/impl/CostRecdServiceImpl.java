@@ -18,10 +18,20 @@ public class CostRecdServiceImpl implements CostRecdService {
 	}
 
 	@Override
-	public List<CostRecd> findAll() throws Exception {
-		return costRecdDao.findData();
+	public List<CostRecd> SpendingfindAll() throws Exception {
+		return costRecdDao.findDataAll();
 
 	}
+	
+	@Override
+	public CostRecd SpendingfindOne(Integer costno) throws Exception {
+		
+		return costRecdDao.findDataOne(costno);
+	}
+
+
+	
+	
 
 	@Override
 	public String addList(CostRecd costRecd) {
@@ -53,5 +63,8 @@ public class CostRecdServiceImpl implements CostRecdService {
 			return null;
 		}
 	}
+
+	
+
 
 }

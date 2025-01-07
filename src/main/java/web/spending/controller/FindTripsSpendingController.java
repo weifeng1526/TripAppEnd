@@ -15,7 +15,7 @@ import web.spending.service.CostRecdService;
 import web.spending.service.impl.CostRecdServiceImpl;
 import web.spending.vo.CostRecd;
 
-@WebServlet("/spending/FindTripsSpendingAll")
+@WebServlet("/spending/findTripsSpendingAll")
 public class FindTripsSpendingController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -24,7 +24,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	try {
 		CostRecdService costRecdService = new CostRecdServiceImpl();
 		Gson gson = new Gson();
-		String json = gson.toJson(costRecdService.findAll());
+		String json = gson.toJson(costRecdService.SpendingfindAll());
 		resp.getWriter().write(json);
 		
 		

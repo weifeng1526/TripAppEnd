@@ -6,7 +6,8 @@ import web.spending.vo.CostRecd;
 
 public interface CostRecdService {
 	
-	List<CostRecd> findAll() throws Exception;
+	List<CostRecd> SpendingfindAll() throws Exception;
+	CostRecd SpendingfindOne(Integer costno) throws Exception;
 	String addList(CostRecd costRecd);
 	String save(CostRecd costRecd);
  
