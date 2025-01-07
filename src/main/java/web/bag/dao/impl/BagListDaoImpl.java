@@ -3,6 +3,7 @@ package web.bag.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class BagListDaoImpl implements BagListDao {
 		ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/tripapp");
 	}
 
+//	新增物品進入行李清單
 	@Override
 	public void insertBagList(BagList bagList) throws Exception {
 		String sql = "INSERT INTO bag_list (bl_memno, bl_schno, bl_itemno, bl_ready) VALUES (?, ?, ?, ?)";
@@ -34,27 +36,26 @@ public class BagListDaoImpl implements BagListDao {
 		}
 	}
 
+//	查詢資料庫所有行李
 	@Override
-	public List<BagList> selectAllbags() {
-		List<BagList> bagLists = new ArrayList<>();
-		String sql = "SELECT * FROM BAG_List";
-		
-		try (Connection conn = ds.getConnection(); 
-				PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			try(ResultSet rs = pstmt.executeQuery()){
-				while(rs.next()) {
-					BagList baglist = new BagList();
-					baglist.setMemno(rs.getInt("mem_no"));
-					baglist.setSchno(rs.getInt("sch_no"));
-					baglist.setItemno(rs.getInt("item_no"));
-					baglist.setReady(rs.getBoolean("ready"));
-					bagLists.add(baglist);
-				}
+	public List<BagList> selectAllbags() throws NamingException {
+		String sql = "SELECT * FROM bag_list";
+
+		try (Connection conn = ds.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery()) {
+			List<BagList> bagLists = new ArrayList<>();
+			while (rs.next()) {
+				BagList baglist = new BagList();
+				baglist.setMemno(rs.getInt("bl_memno"));
+				baglist.setSchno(rs.getInt("bl_schno"));
+				baglist.setItemno(rs.getInt("bl_itemno"));
+				baglist.setReady(rs.getBoolean("bl_ready"));
+				bagLists.add(baglist);
 			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+			return bagLists;
+		} catch (SQLException e) {
+			throw new NamingException("Database error: " + e.getMessage());
 		}
-		return bagLists;
 	}
 }

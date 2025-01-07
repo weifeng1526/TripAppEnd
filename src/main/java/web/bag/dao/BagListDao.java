@@ -2,11 +2,14 @@ package web.bag.dao;
 
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import web.bag.vo.BagList;
 
 public interface BagListDao {
     void insertBagList(BagList bagList) throws Exception;
 
-	List<BagList> selectAllbags();
+    // 查詢所有行李
+	List<BagList> selectAllbags() throws NamingException;
 
 }

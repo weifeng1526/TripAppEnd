@@ -16,7 +16,7 @@ import web.bag.dao.BagListDao;
 import web.bag.dao.impl.BagListDaoImpl;
 import web.bag.vo.BagList;
 
-@WebServlet("/baglist/get")
+@WebServlet("/bag/get")
 public class BagListGetController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -24,9 +24,9 @@ public class BagListGetController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			BagListDao dao = new BagListDaoImpl();
-			List<BagList> bagLists = dao.selectAllbags();
+			List<BagList> allBagLists = dao.selectAllbags();
 			Gson gson = new Gson();
-			resp.getWriter().write(gson.toJson(bagLists));
+			resp.getWriter().write(gson.toJson(allBagLists));
 		} catch (NamingException e) {
 			resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
