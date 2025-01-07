@@ -18,6 +18,8 @@ public interface DestDao {
 	Dest selectLastOne();
 
 	int update(Dest dest);
+	
+	List<Dest> selectByMemIdAndSchId(int memId, int schId);
 //	Dest selectById(int Id);
 //
 //	

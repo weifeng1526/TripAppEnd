@@ -27,11 +27,11 @@ public class SchedDeleteController extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json; charset=UTF-8");
 		SchedDaoImpl schedDaoImpl;
+		DeleteResult result = new DeleteResult();
 		try {
 			schedDaoImpl = new SchedDaoImpl();
 			Gson gson= new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			Sched sched = gson.fromJson(req.getReader(), Sched.class);
-			DeleteResult result = new DeleteResult();
 			int id = Integer.parseInt(req.getParameter("id"));
 			int isDeleted = schedDaoImpl.deleteById(id);
 			if(isDeleted > 0) {
@@ -46,6 +46,7 @@ public class SchedDeleteController extends HttpServlet{
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			result.setSucesses(false);
 		}
 	}
 }

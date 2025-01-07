@@ -20,7 +20,7 @@ import web.sched.dao.impl.DestDaoImpl;
 import web.sched.vo.Dest;
 
 @WebServlet("/sched/getDestByDate")
-public class DestGetByDate extends HttpServlet {
+public class DestGetByDateController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
