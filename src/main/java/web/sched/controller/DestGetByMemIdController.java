@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import web.sched.dao.impl.DestDaoImpl;
 import web.sched.vo.Dest;
 
-@WebServlet("/sched/dest/memId")
+@WebServlet("/sched/dest/getDestsSample")
 public class DestGetByMemIdController extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
