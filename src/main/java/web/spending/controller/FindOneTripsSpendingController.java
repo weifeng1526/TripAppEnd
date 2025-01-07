@@ -15,7 +15,7 @@ import web.spending.service.CostRecdService;
 import web.spending.service.impl.CostRecdServiceImpl;
 import web.spending.vo.CostRecd;
 
-@WebServlet("/spending/findTripsSpendingOne")
+@WebServlet("/spending/findOneTripsSpending")
 public class FindOneTripsSpendingController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

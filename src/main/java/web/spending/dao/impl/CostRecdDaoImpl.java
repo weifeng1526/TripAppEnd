@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 
 import web.spending.dao.CostRecdDao;
 import web.spending.vo.CostRecd;
+import web.spending.vo.Crew;
 
 public class CostRecdDaoImpl implements CostRecdDao {
 	private DataSource ds;
@@ -55,42 +56,12 @@ public class CostRecdDaoImpl implements CostRecdDao {
 
 	}
 
-//	@Override
-//	public CostRecd costRecd findDataOne(Integer costNo) {
-//		CostRecd costRecd;
-//		String sql = "select * from cost_recd c join member m join sched s where costNo = ? ";
-//		List<CostRecd> costRecdsList = new ArrayList<CostRecd>();
-//		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
-//			pstmt.setInt(1, costNo);
-//			try (ResultSet rs = pstmt.executeQuery()) {
-//				if (rs.next()) {
-//					costRecd = new CostRecd();
-//					costRecd.setCostNo(rs.getInt("cr_cost_no"));
-//					costRecd.setSchNo(rs.getInt("sch_no"));
-//					costRecd.setSchName(rs.getString("sch_name"));
-//					costRecd.setCostType(rs.getByte("cr_cost_type"));
-//					costRecd.setCostPrice(rs.getDouble("cr_cost_price"));
-//					costRecd.setPaidBy(rs.getInt("cr_paid_by"));
-//					costRecd.setPaidByName(rs.getString("mem_name"));
-//					costRecd.setCostPex(rs.getBoolean("cr_cost_pex"));
-//					costRecd.setCrCurRecord(rs.getString("cr_cur_record"));
-//					costRecdsList.add(costRecd);
-//					return costRecdsList;
-//				}
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
-//		return null;
-//	}
-
 	// 如果要把資料抓過來，那就要先查詢 Select，多表格就用join
 
 	@Override
-	public int insert(CostRecd costRecd) {
-		String sql = "insert into cost_recd(sch_no, cr_cur_record, cr_cost_price, cr_paid_by, cr_cost_type, cr_cost_item, cr_cost_pex,cr_cost_time) value(?,?,?,?,?,?,?,?)";
+	public Integer insert(CostRecd costRecd) {
+		String sql = "insert into cost_recd(sch_no, cr_cur_record, cr_cost_price, cr_paid_by, cr_cost_type, cr_cost_item, cr_cost_pex,cr_cost_time, cr_cost_no) value(?,?,?,?,?,?,?,?,?)";
+
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)
 
 		) {
@@ -102,7 +73,7 @@ public class CostRecdDaoImpl implements CostRecdDao {
 			pstmt.setString(6, costRecd.getCostItem());
 			pstmt.setBoolean(7, costRecd.getCostPex());
 			pstmt.setString(8, costRecd.getCrCostTime());
-			
+			pstmt.setInt(9, costRecd.getCostNo());
 
 			// 執行
 			return pstmt.executeUpdate();
@@ -113,27 +84,32 @@ public class CostRecdDaoImpl implements CostRecdDao {
 	}
 
 	@Override
-	public int update(CostRecd costRecd) {
+	public Integer update(CostRecd costRecd) {
 
 		// 要下條件（where），在寫資料的時候也要去思考使用流程，所需要的資料是什麼！資料的意義。
-		String sql = "update cost_recd set cr_cur_record= ?, cr_cost_price= ?, cr_paid_by= ?, cr_cost_type= ?, cr_cost_time= ?, cr_cost_pex= ?, cr_cost_item= ?";
+//		String sql = "update cost_recd set cr_cur_record = ?,  cr_cost_price=?, cr_paid_by=?, cr_cost_type=?, cr_cost_item=?, cr_cost_pex=?,cr_cost_time=?  where cr_cost_no=?";
+//		String sql ="update cost_recd set cr_cur_record = "TWD", cr_cost_price=8000888, cr_paid_by=10, cr_cost_type=5, cr_cost_item="泡泡", cr_cost_pex=0,cr_cost_time="2023-11-23 17:00:00"  where cr_cost_no=1";
+
+		String sql = "update cost_recd set cr_cur_record = ?, cr_cost_price=?, cr_paid_by=?, cr_cost_type=?, cr_cost_item=?, cr_cost_pex=?,cr_cost_time=?  where cr_cost_no=?";
 
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)
 
 		) {
+//			pstmt.setInt(1, costRecd.getSchNo());
 			pstmt.setString(1, costRecd.getCrCurRecord());
 			pstmt.setDouble(2, costRecd.getCostPrice());
-			pstmt.setString(3, costRecd.getPaidByName());
+			pstmt.setInt(3, costRecd.getPaidBy());
 			pstmt.setByte(4, costRecd.getCostType());
-			pstmt.setByte(5, costRecd.getCostType());
-//			pstmt.setTimestamp(6, costRecd.getCostTime());
+			pstmt.setString(5, costRecd.getCostItem());
 			pstmt.setBoolean(6, costRecd.getCostPex());
-			pstmt.setString(7, costRecd.getCostItem());
+			pstmt.setString(7, costRecd.getCrCostTime());
+			pstmt.setInt(8, costRecd.getCostNo());
 
+			// 執行
+			return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return 0;
 	}
 
@@ -142,13 +118,10 @@ public class CostRecdDaoImpl implements CostRecdDao {
 		System.out.println("testRuby" + costno);
 		String sql = "select * from cost_recd where cr_cost_no = ? ";
 
-		try (
-				Connection conn = ds.getConnection(); 
-				PreparedStatement pstmt = conn.prepareStatement(sql);
-				){
-			  System.out.println("Database connection established.");
+		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			System.out.println("Database connection established.");
 			pstmt.setInt(1, costno);
-			 System.out.println("SQL Query: " + sql);
+			System.out.println("SQL Query: " + sql);
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 					CostRecd costRecd = new CostRecd();
@@ -162,17 +135,61 @@ public class CostRecdDaoImpl implements CostRecdDao {
 					costRecd.setCrCostTime(rs.getString("cr_cost_time"));
 					System.out.println("Data found: " + costRecd); // 日誌輸出
 					return costRecd;
-				}else {
+				} else {
 					System.out.println("No data found for costNo: " + costno); // 無資料提示
 				}
 
 			} catch (Exception e) {
-				 System.err.println("Database error: " + e.getMessage());
+				System.err.println("Database error: " + e.getMessage());
 				e.printStackTrace();
-			}		
+			}
 		}
 		return null;
 	}
-	
+
+	@Override
+	public Integer delete(Integer costNo) {
+		String sql = "delete from cost_recd where cr_cost_no=?";
+		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			pstmt.setInt(1, costNo);
+			return pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public Integer crewCount(Crew crew) {
+//		String sql  = "SELECT COUNT(*) total_count FROM crew WHERE sch_no = 1;";
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+//	@Override
+//	public Integer crewCount(Crew crew) {
+//		//查詢整個表
+//		String sql  = "SELECT COUNT(*) FROM crew";
+//
+//		try(Connection conn = ds.getConnection();
+//			PreparedStatement pstmt = conn.prepareStatement(sql);
+//			ResultSet rs = pstmt.executeQuery();) {
+//			
+//			if (rs.next()) {
+//				// 取出第一欄的值，即 COUNT(*) 的結果(算出整個表有幾筆資料)
+//				System.out.println("算有多少人：" + rs.getInt(1));
+//				return rs.getInt(1);
+//			}else {
+//				// 沒有結果，就返回0或拋出錯誤。
+//				return 0;
+//			}
+//		} catch (Exception e) {
+//			// 處理 SQL 異常，例如預設記錄錯誤、拋出自定義錯誤。
+//			e.printStackTrace();
+//		}
+//		return -1;
+//
+//	}
 
 }
