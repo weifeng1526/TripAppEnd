@@ -21,13 +21,15 @@ public class MapServiceImpl implements MapService {
 			int addPlace=mapDao.insert(map);
 			
 			
-			if (addPlace>0) {
+			if (addPlace>0 && addPlanNumber>0) {
 				mapDao.inseartPlan(mapDao.search(address),addPlanNumber);
 			}
 			return mapDao.search(address);
 		} else {
-			
+			if (addPlanNumber>0) {
+				
 				mapDao.inseartPlan(mapDao.search(address),addPlanNumber);
+			}
 			
 		}
 			return mapDao.search(address);
