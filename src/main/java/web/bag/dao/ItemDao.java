@@ -2,12 +2,12 @@ package web.bag.dao;
 
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import web.bag.vo.Item;
 
 public interface ItemDao {
-    // 查詢所有物品
-    List<Item> selectAllItems();
-
+   
     // 根據物品編號查詢物品
     Item selectByItemno(Integer itemno);
     
@@ -20,7 +20,10 @@ public interface ItemDao {
     // 刪除物品 (如果需要)
     boolean deleteItem(Integer itemno);
 
-
+    // 查詢所有物品
+    List<Item> selectAllItems() throws NamingException;
+    
+    // 查詢所有物品ByType
 	List<List<Item>> selectItemsGroupedByType();
 
 }

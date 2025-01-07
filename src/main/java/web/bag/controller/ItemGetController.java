@@ -22,12 +22,13 @@ public class ItemGetController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
+
 		try {
+			// 使用 ItemDao 來獲取所有物品
 			ItemDao dao = new ItemDaoImpl();
-            List<List<Item>> groupedItems = dao.selectItemsGroupedByType();
-		    Gson gson = new Gson();
-		    resp.getWriter().write(gson.toJson(groupedItems));
+			List<Item> allItems = dao.selectAllItems(); // 直接獲取所有物品
+			Gson gson = new Gson();
+			resp.getWriter().write(gson.toJson(allItems)); // 返回物品數據
 		} catch (NamingException e) {
 			resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();

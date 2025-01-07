@@ -25,6 +25,48 @@ public class ItemDaoImpl implements ItemDao {
 	}
 
 	@Override
+	public boolean insertItem(Item item) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updateItem(Item item) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteItem(Integer itemno) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+//	查詢資料庫所有物品
+	@Override
+	public List<Item> selectAllItems() throws NamingException {
+
+		String sql = "SELECT * FROM item"; // SQL 查询所有物品
+		try (Connection conn = ds.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery()) {
+
+			List<Item> items = new ArrayList<>();
+			while (rs.next()) {
+				Item item = new Item();
+				item.setItemNo(rs.getInt("item_no"));
+				item.setItemName(rs.getString("item_name"));
+				item.setItemType(rs.getInt("item_type"));
+				items.add(item);
+			}
+			return items;
+		} catch (SQLException e) {
+			throw new NamingException("Database error: " + e.getMessage());
+		}
+	}
+
+//	查詢資料庫所有物品(根據type)
+	@Override
 	public List<List<Item>> selectItemsGroupedByType() {
 		List<List<Item>> groupedItems = new ArrayList<>();
 		String sql = "SELECT * FROM item"; // 查詢所有物品，您可以根據需要加上 GROUP BY
@@ -54,32 +96,9 @@ public class ItemDaoImpl implements ItemDao {
 		return groupedItems;
 	}
 
-	@Override
-	public boolean insertItem(Item item) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updateItem(Item item) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean deleteItem(Integer itemno) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+//	not yet查詢資料庫所有物品(根據itemno)
 	@Override
 	public Item selectByItemno(Integer itemno) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Item> selectAllItems() {
 		// TODO Auto-generated method stub
 		return null;
 	}
