@@ -12,34 +12,37 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import web.sched.dao.impl.DestDaoImpl;
-import web.sched.vo.Dest;
+import web.sched.dao.impl.SchedDaoImpl;
+import web.sched.vo.Sched;
 
-@WebServlet("/sched/dest/getDestsSample")
-public class DestGetByMemIdController extends HttpServlet {
-	
+@WebServlet("/sch/dest/copy")
+public class DestOfSampleCopyController extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json; charset=UTF-8");
-		List<Dest> dests = new ArrayList<>();
-		Gson gson = new Gson();
-		
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		int getSchId = Integer.parseInt(req.getParameter("schId"));
+		int getSchIdOfSample= Integer.parseInt(req.getParameter("schSampleId"));
 		DestDaoImpl destDaoImpl;
 		try {
 			destDaoImpl = new DestDaoImpl();
-			int memId = Integer.parseInt(req.getParameter("memId")); 
-			int schId = Integer.parseInt(req.getParameter("schId")); 
-			dests = destDaoImpl.selectByMemIdAndSchId(memId, schId);
-			if(!dests.isEmpty()) {
-				System.out.printf("GET: selectByMemIdAndSchId總共%d筆資料\r\n", dests.size());
-			} else {
-				System.out.println("GET: selectByMemIdAndSchId沒有資料\r\n");
+			boolean isCopy = destDaoImpl.insertByCopy(getSchId, getSchIdOfSample);
+			if (isCopy) {
+				System.out.printf("GET: sch's dest %d Copy ok", getSchId);
+				System.out.println();
 			}
-			resp.getWriter().write(gson.toJson(dests));
+			else {
+				System.out.printf("GET: sch's dest %d Copy fail %d", getSchId);
+				System.out.println();
+			}
+			resp.getWriter().write(Boolean.toString(isCopy));
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
