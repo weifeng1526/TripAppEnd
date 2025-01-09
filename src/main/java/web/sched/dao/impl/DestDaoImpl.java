@@ -205,7 +205,7 @@ public class DestDaoImpl implements DestDao {
 	}
     @Override
     public int deleteById(int id) {
-        String sql = "DELETE FROM dest WHERE sch_no = ?";
+        String sql = "DELETE FROM dest WHERE dst_no = ?";
         try (
             Connection conn = ds.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
