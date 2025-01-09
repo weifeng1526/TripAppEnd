@@ -1,8 +1,6 @@
 package web.sched.controller;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,33 +15,34 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import web.sched.dao.impl.DestDaoImpl;
-import web.sched.vo.Dest;
+import web.sched.dao.impl.SchedDaoImpl;
+import web.sched.vo.Sched;
 
-@WebServlet("/sched/getDestByDate")
-public class DestGetByDate extends HttpServlet {
+@WebServlet("/sch/dest/copy")
+public class DestOfSampleCopyController extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, IllegalArgumentException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json; charset=UTF-8");
-		
-		List<Dest> list = new ArrayList<>();
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		String getDate = req.getParameter("date");
-		DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		Date date = Date.valueOf(getDate);
+		int getSchId = Integer.parseInt(req.getParameter("schId"));
+		int getSchIdOfSample= Integer.parseInt(req.getParameter("schSampleId"));
 		DestDaoImpl destDaoImpl;
 		try {
 			destDaoImpl = new DestDaoImpl();
-			list = destDaoImpl.selectAllByDate(date);
-			if(!list.isEmpty()) {
-				System.out.printf("GET: Dest表的日期%s總共有%d筆資料\r\n",date, list.size());
-			} else {
-				System.out.println("GET: Dest表沒有資料\r\n");
+			boolean isCopy = destDaoImpl.insertByCopy(getSchId, getSchIdOfSample);
+			if (isCopy) {
+				System.out.printf("GET: sch's dest %d Copy ok", getSchId);
+				System.out.println();
 			}
-			resp.getWriter().write(gson.toJson(list));
+			else {
+				System.out.printf("GET: sch's dest %d Copy fail %d", getSchId);
+				System.out.println();
+			}
+			resp.getWriter().write(Boolean.toString(isCopy));
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
