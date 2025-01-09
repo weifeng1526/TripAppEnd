@@ -90,9 +90,15 @@ public class CostRecdServiceImpl implements CostRecdService {
 	}
 
 	@Override
-	public Integer crewNum(Crew crew) {
-		return costRecdDao.crewCount(crew)  ; 
+	public Integer crewNum(Integer schNo) {
+		System.out.println("count--Service--" + costRecdDao.crewCount(schNo));
+		return costRecdDao.crewCount(schNo)  ; 
 		
+	}
+
+	@Override
+	public List<Crew> FindTripCrew(Integer schNo) throws Exception {
+		return costRecdDao.findcrew(schNo);
 	}
 
 

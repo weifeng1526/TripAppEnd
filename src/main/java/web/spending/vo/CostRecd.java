@@ -35,6 +35,10 @@ public class CostRecd {
 	private Boolean costPex;
 	// 紀錄幣別
 	private String crCurRecord;
+	// 出遊幣別
+	private String schCur;
+	// 結算幣別
+	private String crCur;
 	// 消費時間
 	private String crCostTime;
 	

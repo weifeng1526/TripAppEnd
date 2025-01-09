@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import web.sched.vo.Sched;
 import web.spending.dao.CostRecdDao;
 import web.spending.vo.CostRecd;
 import web.spending.vo.Crew;
@@ -42,6 +43,8 @@ public class CostRecdDaoImpl implements CostRecdDao {
 					costRecd.setPaidByName(rs.getString("mem_name"));
 					costRecd.setCostPex(rs.getBoolean("cr_cost_pex"));
 					costRecd.setCrCurRecord(rs.getString("cr_cur_record"));
+					costRecd.setSchCur(rs.getString("sch_cur"));
+					costRecd.setCrCur(rs.getString("cr_cur"));
 					costRecd.setCrCostTime(rs.getString("cr_cost_time"));
 					list.add(costRecd);
 				}
@@ -116,23 +119,37 @@ public class CostRecdDaoImpl implements CostRecdDao {
 	@Override
 	public CostRecd findDataOne(Integer costno) throws Exception {
 		System.out.println("testRuby" + costno);
-		String sql = "select * from cost_recd where cr_cost_no = ? ";
+		String sql = "select * from cost_recd cr join member m join sched s where cr_cost_no = ? ";
 
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
 			System.out.println("Database connection established.");
 			pstmt.setInt(1, costno);
-			System.out.println("SQL Query: " + sql);
+			
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 					CostRecd costRecd = new CostRecd();
+//					costRecd.setCostNo(rs.getInt("cr_cost_no"));
+//					costRecd.setSchNo(rs.getInt("sch_no"));
+//					costRecd.setCostType(rs.getByte("cr_cost_type"));
+//					costRecd.setCostPrice(rs.getDouble("cr_cost_price"));
+//					costRecd.setPaidBy(rs.getInt("cr_paid_by"));
+//					costRecd.setCostPex(rs.getBoolean("cr_cost_pex"));
+//					costRecd.setCrCurRecord(rs.getString("cr_cur_record"));
+//					costRecd.setCrCostTime(rs.getString("cr_cost_time"));
+					
 					costRecd.setCostNo(rs.getInt("cr_cost_no"));
 					costRecd.setSchNo(rs.getInt("sch_no"));
+					costRecd.setSchName(rs.getString("sch_name"));
 					costRecd.setCostType(rs.getByte("cr_cost_type"));
 					costRecd.setCostPrice(rs.getDouble("cr_cost_price"));
 					costRecd.setPaidBy(rs.getInt("cr_paid_by"));
+					costRecd.setPaidByName(rs.getString("mem_name"));
 					costRecd.setCostPex(rs.getBoolean("cr_cost_pex"));
 					costRecd.setCrCurRecord(rs.getString("cr_cur_record"));
+					costRecd.setSchCur(rs.getString("sch_cur"));
+					costRecd.setCrCur(rs.getString("cr_cur"));
 					costRecd.setCrCostTime(rs.getString("cr_cost_time"));
+					
 					System.out.println("Data found: " + costRecd); // 日誌輸出
 					return costRecd;
 				} else {
@@ -160,13 +177,73 @@ public class CostRecdDaoImpl implements CostRecdDao {
 		return 0;
 	}
 
+	
+	
+	
+	
+
 	@Override
-	public Integer crewCount(Crew crew) {
-//		String sql  = "SELECT COUNT(*) total_count FROM crew WHERE sch_no = 1;";
-		// TODO Auto-generated method stub
+	public List<Crew> findcrew(Integer schNo) throws Exception {
+		Crew crew ;
+//		String sql = "select * from crew c join member m  where sch_no = ? ";
+		String sql = "select * from crew c join member m on c.mem_no = m.mem_no where c.sch_no = ?";
+		
+
+		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+		
+			pstmt.setInt(1, schNo);
+			
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<Crew> list = new ArrayList<Crew>();
+				
+				while (rs.next()) {
+					crew = new Crew();
+//					crew.setCrewNo(rs.getInt("crew_no"));
+					crew.setSchNo(rs.getInt("sch_no"));
+					crew.setCrewName(rs.getString("crew_name"));
+					crew.setMemNo(rs.getInt("mem_no"));
+//					crew.setMemName(rs.getString("mem_name"));
+					crew.setMemIcon(rs.getString("mem_icon"));
+					list.add(crew);
+				} 
+				return list;
+			} catch (Exception e) {
+				System.err.println("Database error: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
 		return null;
 	}
 
+	
+	
+	@Override
+	public Integer crewCount(Integer schNo) {
+		String sql = "SELECT COUNT(*) total_count FROM crew WHERE sch_no = ?";
+
+		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);
+
+		) {
+			pstmt.setInt(1, schNo);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					System.out.println("count--DAO--"+rs.getInt("total_count"));
+					return rs.getInt("total_count"); // 取出 total_count 的值
+				} else {
+					// 沒有結果，就返回0或拋出錯誤。
+					return 0;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	
+	
+	
 //	@Override
 //	public Integer crewCount(Crew crew) {
 //		//查詢整個表
