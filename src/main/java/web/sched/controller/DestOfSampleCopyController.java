@@ -28,20 +28,21 @@ public class DestOfSampleCopyController extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json; charset=UTF-8");
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		int getSchNo = Integer.parseInt(req.getParameter("schNo"));
+		int getSchId = Integer.parseInt(req.getParameter("schId"));
+		int getSchIdOfSample= Integer.parseInt(req.getParameter("schSampleId"));
 		DestDaoImpl destDaoImpl;
 		try {
 			destDaoImpl = new DestDaoImpl();
-			Boolean isCopy = destDaoImpl.insertByCopy(getSchNo);
+			boolean isCopy = destDaoImpl.insertByCopy(getSchId, getSchIdOfSample);
 			if (isCopy) {
-				System.out.printf("GET: sch's %d dest Copy ok", getSchNo);
+				System.out.printf("GET: sch's dest %d Copy ok", getSchId);
 				System.out.println();
 			}
 			else {
-				System.out.printf("GET: sch's %d dest Copy fail %d", getSchNo);
+				System.out.printf("GET: sch's dest %d Copy fail %d", getSchId);
 				System.out.println();
 			}
-			resp.getWriter().write(isCopy.toString());
+			resp.getWriter().write(Boolean.toString(isCopy));
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}

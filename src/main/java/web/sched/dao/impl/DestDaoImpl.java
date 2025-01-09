@@ -183,4 +183,39 @@ public class DestDaoImpl implements DestDao {
 		}
 		return list;
 	}
+	
+	@Override
+	public boolean insertByCopy(int schId, int schIdOfSample) {
+		String sql = "INSERT INTO dest (sch_no, poi_no, dst_name, dst_addr, dst_dep, dst_date, dst_start, dst_end, dst_inr) "
+				+ "SELECT ?, poi_no, dst_name, dst_addr, dst_dep, dst_date, dst_start, dst_end, dst_inr "
+				+ "FROM dest "
+				+ "WHERE sch_no = ?";
+		
+		try (Connection connection = ds.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
+			pstmt.setInt(1, schId);
+			pstmt.setInt(2, schIdOfSample);
+			if (pstmt.executeUpdate() > 0) {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+    @Override
+    public int deleteById(int id) {
+        String sql = "DELETE FROM dest WHERE sch_no = ?";
+        try (
+            Connection conn = ds.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, id);
+            int isDeleted = pstmt.executeUpdate();
+            return isDeleted;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }
