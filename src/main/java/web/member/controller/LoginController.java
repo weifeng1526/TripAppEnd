@@ -26,6 +26,9 @@ public class LoginController extends HttpServlet {
 		TripMember member = gson.fromJson(req.getReader(), TripMember.class);
 		MemberResult result = new MemberResult();
 		System.out.println("doPost");
+		
+		// 移除 Session 功能
+		// 拿帳號密碼,找到用戶的資料
 
 		if (member == null || member.getMemEmail() == null || member.getMemPw() == null) {
 			System.out.println("null");
@@ -37,14 +40,9 @@ public class LoginController extends HttpServlet {
 				member = sevice.login(member);
 				if (member != null) {
 					System.out.println("not Null");
-					if (req.getSession(false) != null) {
-						req.changeSessionId();
-					}
-					HttpSession session = req.getSession();
-					session.setAttribute("member", member);
 					System.out.println(member);
 					result.setSucess(true);
-					resp.getWriter().write(gson.toJson(result));
+					resp.getWriter().write(gson.toJson(member));
 				} else {
 					System.out.println("信箱或密碼錯誤");
 					result.setSucess(false);

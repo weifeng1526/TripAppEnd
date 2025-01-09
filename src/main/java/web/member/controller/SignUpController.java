@@ -23,22 +23,31 @@ public class SignUpController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Gson gson = new Gson();
 		TripMember member = gson.fromJson(req.getReader(), TripMember.class);
+		
 		MemberResult result = new MemberResult();
+		System.out.println("doPost");
 
 		if (member == null) {
+			System.out.println("請將會員資料填寫完整");
 			result.setMessage("請將會員資料填寫完整");
 			result.setSucess(false);
 		} else {
 			try {
 				TripMemberService sevice = new TripMemberServiceImpl();
+				// 建立用戶
+				// 回傳用戶資料，查到用戶資料
+				System.out.println(member);
 				String message = sevice.signup(member);
 				result.setMessage(message);
-				result.setSucess(message == null);
+//				System.out.println(message);
+//				result.setSucess(message == null);
+				resp.getWriter().write(gson.toJson(message));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			String json = gson.toJson(result);
+			System.out.println(member);
+//			resp.getWriter().write(gson.toJson(member));
 		}
-		String json = gson.toJson(result);
-		resp.getWriter().write(json);
 	}
 }
