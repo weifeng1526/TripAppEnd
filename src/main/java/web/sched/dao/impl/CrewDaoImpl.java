@@ -11,6 +11,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import web.member.vo.TripMember;
 import web.sched.dao.CrewDao;
 import web.sched.vo.Crew;
 import web.sched.vo.MemberInCrew;
@@ -99,6 +100,31 @@ public class CrewDaoImpl implements CrewDao {
 				crew.setCrewName(rs.getString("crew_name"));
 				crew.setCrewInvited(rs.getByte("crew_invited"));
 				list.add(crew); // 添加到清單
+			}
+		} catch (Exception e) {
+			e.printStackTrace(); // 打印例外訊息
+		}
+		return list;
+	}
+
+	@Override
+	public List<TripMember> selectMembers() {
+		String sql = "SELECT * FROM member WHERE mem_no > 0";
+		List<TripMember> list = new ArrayList<TripMember>(); // 修正清單類型為 Crew
+		try (
+			Connection connection = ds.getConnection();
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();		
+		) {
+			while (rs.next()) {
+                TripMember tripMember = new TripMember();
+                tripMember.setMemNo(rs.getInt(1));
+                tripMember.setMemEmail(rs.getString(2));
+                tripMember.setMemName(rs.getString(3));
+                tripMember.setMemPw(rs.getString(4));
+                tripMember.setMemSta(rs.getByte(5));
+                tripMember.setMemIcon(rs.getString(6));
+                list.add(tripMember);
 			}
 		} catch (Exception e) {
 			e.printStackTrace(); // 打印例外訊息
