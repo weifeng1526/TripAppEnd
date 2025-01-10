@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import com.google.gson.GsonBuilder;
 import web.sched.dao.impl.CrewDaoImpl;
 import web.sched.vo.Crew;
 
+@WebServlet("/sched/crew/get_all")
 public class CrewGetBySchIdController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
