@@ -27,10 +27,12 @@ public class CostRecd {
 	private String costItem;	
 	// 消費金額
 	private Double costPrice;
-	// 付款人
-	private Integer paidBy;
-	// 會員名稱
+	// 付款人編號
+	private Integer paidByNo;
+	// 付款人名稱
 	private String paidByName;
+	// 會員名稱
+//	private String paidByName;
 	// 公費支出
 	private Boolean costPex;
 	// 紀錄幣別

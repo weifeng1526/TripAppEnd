@@ -36,12 +36,13 @@ public class CostRecdDaoImpl implements CostRecdDao {
 //				   + "where mem_no = ? ";
 		
 		
-String sql = "SELECT cr_cost_no, crew.sch_no, sch_name, mem_no, mem_name, cr_cost_type, cr_cost_item, cr_cost_price, cr_paid_by, cr_cost_pex, cr_cur_record, cr_cur, sch_cur, cr_cost_time "
+		String sql = "SELECT cr.cr_cost_no, crew.sch_no, s.sch_name, crew.mem_no, m.mem_name, cr.cr_cost_type, cr.cr_cost_item, cr.cr_cost_price, cr_paid_by, m2.mem_name AS paid_name, cr.cr_cost_pex, cr.cr_cur_record, cr.cr_cur, s.sch_cur, cr.cr_cost_time "
 		+ "FROM crew "
-		+ "JOIN cost_recd ON (cost_recd.sch_no = crew.sch_no) "
-		+ "JOIN (select mem_no mn , mem_name FROM member) mem ON (mem.mn = crew.mem_no) "
-		+ "JOIN (select sch_no sn, sch_name, sch_cur from sched) trip  ON (trip.sn = crew.sch_no) "
-		+ "where mem_no  = ? ";
+		+ "INNER JOIN cost_recd cr ON crew.sch_no = cr.sch_no "
+		+ "INNER JOIN member m ON crew.mem_no = m.mem_no "
+		+ "INNER JOIN sched s ON crew.sch_no = s.sch_no "
+		+ "INNER JOIN member m2 ON cr.cr_paid_by = m2.mem_no " 
+		+ "WHERE crew.mem_no = ? ";
 
 
 		try (
@@ -62,8 +63,8 @@ String sql = "SELECT cr_cost_no, crew.sch_no, sch_name, mem_no, mem_name, cr_cos
 					costRecd.setSchName(rs.getString("sch_name"));
 					costRecd.setCostType(rs.getByte("cr_cost_type"));
 					costRecd.setCostPrice(rs.getDouble("cr_cost_price"));
-					costRecd.setPaidBy(rs.getInt("cr_paid_by"));
-					costRecd.setPaidByName(rs.getString("mem_name"));
+					costRecd.setPaidByNo(rs.getInt("cr_paid_by"));
+					costRecd.setPaidByName(rs.getString("paid_name"));
 					costRecd.setCostPex(rs.getBoolean("cr_cost_pex"));
 					costRecd.setCrCurRecord(rs.getString("cr_cur_record"));
 					costRecd.setSchCur(rs.getString("sch_cur"));
@@ -96,7 +97,7 @@ String sql = "SELECT cr_cost_no, crew.sch_no, sch_name, mem_no, mem_name, cr_cos
 			pstmt.setInt(1, costRecd.getSchNo());
 			pstmt.setString(2, costRecd.getCrCurRecord());
 			pstmt.setDouble(3, costRecd.getCostPrice());
-			pstmt.setInt(4, costRecd.getPaidBy());
+			pstmt.setString(4, costRecd.getPaidByName());
 			pstmt.setByte(5, costRecd.getCostType());
 			pstmt.setString(6, costRecd.getCostItem());
 			pstmt.setBoolean(7, costRecd.getCostPex());
@@ -127,7 +128,7 @@ String sql = "SELECT cr_cost_no, crew.sch_no, sch_name, mem_no, mem_name, cr_cos
 //			pstmt.setInt(1, costRecd.getSchNo());
 			pstmt.setString(1, costRecd.getCrCurRecord());
 			pstmt.setDouble(2, costRecd.getCostPrice());
-			pstmt.setInt(3, costRecd.getPaidBy());
+			pstmt.setString(3, costRecd.getPaidByName());
 			pstmt.setByte(4, costRecd.getCostType());
 			pstmt.setString(5, costRecd.getCostItem());
 			pstmt.setBoolean(6, costRecd.getCostPex());
@@ -168,7 +169,7 @@ String sql = "SELECT cr_cost_no, crew.sch_no, sch_name, mem_no, mem_name, cr_cos
 					costRecd.setSchName(rs.getString("sch_name"));
 					costRecd.setCostType(rs.getByte("cr_cost_type"));
 					costRecd.setCostPrice(rs.getDouble("cr_cost_price"));
-					costRecd.setPaidBy(rs.getInt("cr_paid_by"));
+					costRecd.setPaidByNo(rs.getInt("cr_paid_by"));
 					costRecd.setPaidByName(rs.getString("mem_name"));
 					costRecd.setCostPex(rs.getBoolean("cr_cost_pex"));
 					costRecd.setCrCurRecord(rs.getString("cr_cur_record"));
