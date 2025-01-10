@@ -1,5 +1,6 @@
 package web.sched.dao.impl;
 
+import java.lang.reflect.Member;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,7 @@ import javax.sql.DataSource;
 
 import web.sched.dao.CrewDao;
 import web.sched.vo.Crew;
+import web.sched.vo.MemberInCrew;
 
 public class CrewDaoImpl implements CrewDao {
 	private DataSource ds;
@@ -46,10 +48,31 @@ public class CrewDaoImpl implements CrewDao {
 	}
 
 	@Override
-	public Crew selectByMemId(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public List<MemberInCrew> selectMemberInCrew(Integer id) {
+		String sql ="SELECT c.crew_no, ?, m.mem_no, m.mem_icon, m.mem_name, c.crew_peri, c.crew_ide, c.crew_name, c.crew_invited FROM member m JOIN crew c ON m.mem_no = c.mem_no;";
+		List<MemberInCrew> list = new ArrayList<MemberInCrew>(); // 修正清單類型為 Crew
+		try (Connection connection = ds.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql)) {
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				// 將資料從 ResultSet 轉換為 Crew 實例
+				MemberInCrew memberInCrew = new MemberInCrew();
+				memberInCrew.setCrewNo(rs.getInt("crew_no"));
+				memberInCrew.setSchNo(rs.getInt("sch_no"));
+				memberInCrew.setMemNo(rs.getInt("mem_no"));
+				memberInCrew.setMemIcon(rs.getBytes("m.mem_icon"));
+				memberInCrew.setMemName(rs.getString("m.mem_name"));						
+				memberInCrew.setCrewPeri(rs.getByte("crew_peri"));
+				memberInCrew.setCrewIde(rs.getByte("crew_ide"));
+				memberInCrew.setCrewName(rs.getString("crew_name"));
+				memberInCrew.setCrewInvited(rs.getByte("crew_invited"));
+				list.add(memberInCrew); // 添加到清單
+			}
+		} catch (Exception e) {
+			e.printStackTrace(); // 打印例外訊息
+		}
+		return list;
+	}		
 
 	@Override
 	public int deleteByMemId(Integer id) {

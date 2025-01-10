@@ -1,10 +1,10 @@
 package web.sched.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,10 +15,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import web.sched.dao.impl.CrewDaoImpl;
-import web.sched.vo.Crew;
+import web.sched.vo.MemberInCrew;
 
-@WebServlet("/sched/crew/getBySchId")
-public class CrewGetBySchIdController extends HttpServlet {
+@WebServlet("/sched/memberInCrew/getBySchId")
+public class CrewGetMemberCntroller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -26,17 +26,17 @@ public class CrewGetBySchIdController extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json; charset=UTF-8");
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		int schId = Integer.parseInt(req.getParameter("schId"));
 		CrewDaoImpl crewDaoImpl;
-		List<Crew> list = new ArrayList<Crew>();
+		List<MemberInCrew> list = new ArrayList<MemberInCrew>();
+		int schId = Integer.parseInt(req.getParameter("schId"));
 		try {
 			crewDaoImpl = new CrewDaoImpl();
-			list = crewDaoImpl.selectBySchId(schId);
+			list = crewDaoImpl.selectMemberInCrew(schId);
 			if (list != null && !list.isEmpty()) {
-				System.out.printf("GET crew: ok");
+				System.out.printf("GET member in crew: ok");
 				System.out.println();
 			} else {
-				System.out.printf("GET crew: by schId fail %d", schId);
+				System.out.printf("GET member in crew: by schId fail %d", schId);
 				System.out.println();
 			}
 			resp.getWriter().write(gson.toJson(list));
