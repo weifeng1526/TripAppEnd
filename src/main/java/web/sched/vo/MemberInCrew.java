@@ -9,6 +9,7 @@ public class MemberInCrew {
 	private int memNo;
 	private byte[] memIcon;
 	private String memName;
+	private String memEmail;
 	private byte crewPeri;
 	private byte crewIde;
 	private String crewName;

@@ -49,7 +49,7 @@ public class CrewDaoImpl implements CrewDao {
 
 	@Override
 	public List<MemberInCrew> selectMemberInCrew(Integer id) {
-		String sql ="SELECT c.crew_no, ?, m.mem_no, m.mem_icon, m.mem_name, c.crew_peri, c.crew_ide, c.crew_name, c.crew_invited FROM member m JOIN crew c ON m.mem_no = c.mem_no;";
+		String sql ="SELECT c.crew_no, c.sch_no, m.mem_no, m.mem_icon, m.mem_name, m.mem_email, c.crew_peri, c.crew_ide, c.crew_name, c.crew_invited FROM member m JOIN crew c ON m.mem_no = c.mem_no WHERE c.sch_no = ?";
 		List<MemberInCrew> list = new ArrayList<MemberInCrew>(); // 修正清單類型為 Crew
 		try (Connection connection = ds.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql)) {
 			pstmt.setInt(1, id);
@@ -61,7 +61,8 @@ public class CrewDaoImpl implements CrewDao {
 				memberInCrew.setSchNo(rs.getInt("sch_no"));
 				memberInCrew.setMemNo(rs.getInt("mem_no"));
 				memberInCrew.setMemIcon(rs.getBytes("m.mem_icon"));
-				memberInCrew.setMemName(rs.getString("m.mem_name"));						
+				memberInCrew.setMemName(rs.getString("m.mem_name"));	
+				memberInCrew.setMemEmail(rs.getString("m.mem_email"));
 				memberInCrew.setCrewPeri(rs.getByte("crew_peri"));
 				memberInCrew.setCrewIde(rs.getByte("crew_ide"));
 				memberInCrew.setCrewName(rs.getString("crew_name"));
