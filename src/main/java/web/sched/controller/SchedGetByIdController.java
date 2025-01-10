@@ -35,7 +35,6 @@ public class SchedGetByIdController extends HttpServlet {
 				System.out.println("n");
 				getId = 0;
 				resp.getWriter().write(gson.toJson(getId));
-				resp.setStatus(resp.SC_NO_CONTENT);
 			}
 		} catch (NamingException e) {
 			e.printStackTrace();
