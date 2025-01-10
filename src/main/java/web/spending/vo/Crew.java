@@ -9,12 +9,14 @@ public class Crew {
 //	private Integer crewNo;
 	// 行程編號
 	private Integer schNo;
+	// 行程名稱
+	private String schName;
 	// 群組名稱
-	private String crewName;
+//	private String crewName;
 	// 會員編號
 	private Integer memNo;
 	// 會員暱稱
-//	private String memName;
+	private String memName;
 	// 會員頭像
 	private String memIcon;
 	

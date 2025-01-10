@@ -19,8 +19,9 @@ public class CostRecdServiceImpl implements CostRecdService {
 	}
 
 	@Override
-	public List<CostRecd> SpendingfindAll() throws Exception {
-		return costRecdDao.findDataAll();
+	public List<CostRecd> SpendingfindAll(Integer memNo) throws Exception {
+		System.out.println("service--"+memNo);
+		return costRecdDao.findDataAll(memNo);
 
 	}
 
@@ -30,6 +31,7 @@ public class CostRecdServiceImpl implements CostRecdService {
 		return costRecdDao.findDataOne(costno);
 	}
 
+	
 	@Override
 	public String addList(CostRecd costRecd) {
 		Byte CostType = costRecd.getCostType();
@@ -99,6 +101,11 @@ public class CostRecdServiceImpl implements CostRecdService {
 	@Override
 	public List<Crew> FindTripCrew(Integer schNo) throws Exception {
 		return costRecdDao.findcrew(schNo);
+	}
+
+	@Override
+	public List<Crew> FindTripName(Integer memNo) throws Exception {
+		return costRecdDao.findTripName(memNo);
 	}
 
 

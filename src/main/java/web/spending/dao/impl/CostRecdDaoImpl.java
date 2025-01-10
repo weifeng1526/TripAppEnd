@@ -25,15 +25,38 @@ public class CostRecdDaoImpl implements CostRecdDao {
 	}
 
 	@Override
-	public List<CostRecd> findDataAll() {
+	public List<CostRecd> findDataAll(Integer memNo) {
 		CostRecd costRecd;
-		String sql = "select * from cost_recd c join member m join sched s";
-		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+//		String sql = "select * from cost_recd c join member m join sched s";
+//		String sql = "SELECT crew.sch_no, sch_name, mem_no, mem_name, cr_cost_type, cr_cost_item, cr_cost_price, cr_paid_by, cr_cost_pex, cr_cur_record, cr_cur, sch_cur "
+//				   + "FROM crew "
+//				   + "JOIN cost_recd ON (cost_recd.sch_no = crew.sch_no) "
+//				   + "JOIN (select mem_no mn , mem_name FROM member) mem ON (mem.mn = crew.mem_no) "
+//				   + "JOIN (select sch_no sn, sch_name, sch_cur from sched) trip  ON (trip.sn = crew.sch_no) "
+//				   + "where mem_no = ? ";
+		
+		
+String sql = "SELECT cr_cost_no, crew.sch_no, sch_name, mem_no, mem_name, cr_cost_type, cr_cost_item, cr_cost_price, cr_paid_by, cr_cost_pex, cr_cur_record, cr_cur, sch_cur, cr_cost_time "
+		+ "FROM crew "
+		+ "JOIN cost_recd ON (cost_recd.sch_no = crew.sch_no) "
+		+ "JOIN (select mem_no mn , mem_name FROM member) mem ON (mem.mn = crew.mem_no) "
+		+ "JOIN (select sch_no sn, sch_name, sch_cur from sched) trip  ON (trip.sn = crew.sch_no) "
+		+ "where mem_no  = ? ";
 
+
+		try (
+				Connection conn = ds.getConnection(); 
+				PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			pstmt.setInt(1, memNo);
+			System.out.println("pstmt"+pstmt);
 			try (ResultSet rs = pstmt.executeQuery()) {
+				
 				List<CostRecd> list = new ArrayList<CostRecd>();
+				System.out.println("有沒有創建list:");
+				System.out.println(rs);
 				while (rs.next()) {
 					costRecd = new CostRecd();
+					//如果是自動編號就不用寫
 					costRecd.setCostNo(rs.getInt("cr_cost_no"));
 					costRecd.setSchNo(rs.getInt("sch_no"));
 					costRecd.setSchName(rs.getString("sch_name"));
@@ -46,10 +69,12 @@ public class CostRecdDaoImpl implements CostRecdDao {
 					costRecd.setSchCur(rs.getString("sch_cur"));
 					costRecd.setCrCur(rs.getString("cr_cur"));
 					costRecd.setCrCostTime(rs.getString("cr_cost_time"));
+					System.out.println("有沒有來");
 					list.add(costRecd);
 				}
-
+				System.out.println(list);
 				return list;
+				
 			}
 
 		} catch (Exception e) {
@@ -63,7 +88,7 @@ public class CostRecdDaoImpl implements CostRecdDao {
 
 	@Override
 	public Integer insert(CostRecd costRecd) {
-		String sql = "insert into cost_recd(sch_no, cr_cur_record, cr_cost_price, cr_paid_by, cr_cost_type, cr_cost_item, cr_cost_pex,cr_cost_time, cr_cost_no) value(?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into cost_recd(sch_no, cr_cur_record, cr_cost_price, cr_paid_by, cr_cost_type, cr_cost_item, cr_cost_pex,cr_cost_time, cr_cur) value(?,?,?,?,?,?,?,?,?)";
 
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)
 
@@ -76,7 +101,8 @@ public class CostRecdDaoImpl implements CostRecdDao {
 			pstmt.setString(6, costRecd.getCostItem());
 			pstmt.setBoolean(7, costRecd.getCostPex());
 			pstmt.setString(8, costRecd.getCrCostTime());
-			pstmt.setInt(9, costRecd.getCostNo());
+//			pstmt.setInt(9, costRecd.getCostNo());
+			pstmt.setString(9, costRecd.getCrCur());
 
 			// 執行
 			return pstmt.executeUpdate();
@@ -200,7 +226,7 @@ public class CostRecdDaoImpl implements CostRecdDao {
 					crew = new Crew();
 //					crew.setCrewNo(rs.getInt("crew_no"));
 					crew.setSchNo(rs.getInt("sch_no"));
-					crew.setCrewName(rs.getString("crew_name"));
+					crew.setSchName(rs.getString("crew_name"));
 					crew.setMemNo(rs.getInt("mem_no"));
 //					crew.setMemName(rs.getString("mem_name"));
 					crew.setMemIcon(rs.getString("mem_icon"));
@@ -214,6 +240,48 @@ public class CostRecdDaoImpl implements CostRecdDao {
 		}
 		return null;
 	}
+	
+	
+	
+
+	@Override
+	public List<Crew> findTripName(Integer memNo) throws Exception {
+		Crew crew;
+		String sql = "select * "
+				+ "from crew c "
+				+ "join sched s on c.sch_no = s.sch_no "
+				+ "where c.mem_no = ?";
+		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			
+			pstmt.setInt(1, memNo);
+			
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<Crew> list = new ArrayList<Crew>();
+				
+				while (rs.next()) {
+					crew = new Crew();
+					crew.setSchNo(rs.getInt("sch_no"));
+					crew.setSchName(rs.getString("sch_name"));
+					list.add(crew);
+				} 
+				return list;
+			} catch (Exception e) {
+				System.err.println("Database error: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+				
+		
+		
+		
+		return null;
+	}
+	
+	
+	
+	
+	
+	
 
 	
 	
@@ -240,8 +308,7 @@ public class CostRecdDaoImpl implements CostRecdDao {
 		}
 		return 0;
 	}
-	
-	
+
 	
 	
 //	@Override

@@ -7,8 +7,9 @@ import web.spending.vo.Crew;
 
 public interface CostRecdService {
 	
-	List<CostRecd> SpendingfindAll() throws Exception;
+	List<CostRecd> SpendingfindAll(Integer memNo) throws Exception;
 	List<Crew> FindTripCrew(Integer schNo) throws Exception;
+	List<Crew> FindTripName(Integer memNo) throws Exception;
 	CostRecd SpendingfindOne(Integer costno) throws Exception;
 	String addList(CostRecd costRecd);
 	

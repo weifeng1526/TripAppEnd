@@ -24,7 +24,8 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
 	try {
 		CostRecdService costRecdService = new CostRecdServiceImpl();
 		Gson gson = new Gson();
-		String json = gson.toJson(costRecdService.SpendingfindAll());
+		Integer memNo = Integer.parseInt(req.getParameter("memNo")) ;
+		String json = gson.toJson(costRecdService.SpendingfindAll(memNo));
 		resp.getWriter().write(json);
 		
 		
