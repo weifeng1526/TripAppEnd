@@ -43,7 +43,7 @@ public class MapDaoImpl implements MapDao {
 			pstmt.setBigDecimal(3, map.getPoiLng());
 			pstmt.setBigDecimal(4, map.getPoiLat());
 			pstmt.setString(5, map.getPoiLab());
-			pstmt.setString(5, map.getPoiPic());
+			pstmt.setString(6, map.getPoiPic());
 			pstmt.setInt(7, map.getPoiLike());
 			// 執行寫入
 			return pstmt.executeUpdate();
