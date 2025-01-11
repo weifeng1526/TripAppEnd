@@ -35,7 +35,7 @@ public class MapDaoImpl implements MapDao {
 
 	@Override
 	public int insert(Map map) {
-		String sql = "insert into poi(poi_add,poi_name,poi_lng,poi_lat,poi_lab) values(?,?,?,?,?)";
+		String sql = "insert into poi(poi_add,poi_name,poi_lng,poi_lat,poi_lab,poi_pic,poi_like) values(?,?,?,?,?,?,?)";
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
 			// 填上問號
 			pstmt.setString(1, map.getPoiAdd());
@@ -43,6 +43,8 @@ public class MapDaoImpl implements MapDao {
 			pstmt.setBigDecimal(3, map.getPoiLng());
 			pstmt.setBigDecimal(4, map.getPoiLat());
 			pstmt.setString(5, map.getPoiLab());
+			pstmt.setString(5, map.getPoiPic());
+			pstmt.setInt(7, map.getPoiLike());
 			// 執行寫入
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -66,6 +68,7 @@ public class MapDaoImpl implements MapDao {
 					map.setPoiLng(rs.getBigDecimal("poi_lng"));
 					map.setPoiLat(rs.getBigDecimal("poi_lat"));
 					map.setPoiLab(rs.getString("poi_lab"));
+					map.setPoiLike(rs.getInt("poi_like"));
 
 					return map;
 				}

@@ -28,6 +28,8 @@ public class MapPlaceController extends HttpServlet {
 		String address = map.getPoiAdd();
 		int addPlanNumber = map.getSchNo();
 		Map selectPlace = new Map();
+		System.out.println("行程表編號:"+addPlanNumber);
+		System.out.println("收藏狀態:"+map.getPoiLike());
 		try {
 			MapService service = new MapServiceImpl();
 			selectPlace = service.placeinfoaddcheck(map, address,addPlanNumber);
