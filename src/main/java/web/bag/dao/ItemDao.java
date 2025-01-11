@@ -26,4 +26,6 @@ public interface ItemDao {
     // 查詢所有物品ByType
 	List<List<Item>> selectItemsGroupedByType();
 
+	List<Item> selectIfExist(Integer memNo,Integer schNo) throws NamingException;
+
 }
