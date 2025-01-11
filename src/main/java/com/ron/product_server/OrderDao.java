@@ -28,7 +28,7 @@ public class OrderDao implements ODao<Order> {
 
 	@Override
 	public int insert(Order order) throws SQLException {
-		String sql = "INSERT INTO orders (mem_no, prod_no, prod_name, prod_price, ord_dt, card_no, exp_date, cvv, is_submitted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		String sql = "INSERT INTO orders (mem_no, prod_no, prod_name, prod_price, ord_dt, card_no, exp_date, cvv, is_submitted, prod_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setInt(1, order.getMemNo());
@@ -40,6 +40,7 @@ public class OrderDao implements ODao<Order> {
 			ps.setString(7, order.getExpDate());
 			ps.setString(8, order.getCvv());
 			ps.setBoolean(9, order.getIsSubmitted());
+			ps.setString(10, order.getProdPic());
 //            ps.executeUpdate();
 
 			int affectedRows = ps.executeUpdate(); // 取得受影響的列數
@@ -66,7 +67,7 @@ public class OrderDao implements ODao<Order> {
 	// 更新訂單
 	@Override
 	public void update(Order order) throws SQLException {
-		String sql = "UPDATE orders SET mem_no = ?, prod_no = ?, prod_name = ?, ord_dt = ?, prod_price = ?, card_no = ?, exp_date = ?, cvv = ?, is_submitted = ? WHERE ord_no = ?;";
+		String sql = "UPDATE orders SET mem_no = ?, prod_no = ?, prod_name = ?, ord_dt = ?, prod_price = ?, card_no = ?, exp_date = ?, cvv = ?, is_submitted = ?, prod_pic = ? WHERE ord_no = ?;";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setInt(1, order.getMemNo());
@@ -78,7 +79,8 @@ public class OrderDao implements ODao<Order> {
 			ps.setString(7, order.getExpDate());
 			ps.setString(8, order.getCvv());
 			ps.setBoolean(9, order.getIsSubmitted());
-			ps.setInt(10, order.getOrdNo());
+			ps.setString(10, order.getProdPic());
+			ps.setInt(11, order.getOrdNo());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -103,7 +105,7 @@ public class OrderDao implements ODao<Order> {
 	// 根據訂單編號查找訂單
 	@Override
 	public Order findBy(int ordNo) throws SQLException {
-		String sql = "SELECT ord_no, mem_no, prod_no, prod_name, ord_dt, prod_price, card_no, exp_date, cvv, is_submitted FROM orders WHERE ord_no = ?;";
+		String sql = "SELECT ord_no, mem_no, prod_no, prod_name, ord_dt, prod_price, card_no, exp_date, cvv, is_submitted, prod_pic FROM orders WHERE ord_no = ?;";
 		Order order = null;
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -119,8 +121,9 @@ public class OrderDao implements ODao<Order> {
 				String expDate = rs.getString("exp_date");
 				String cvv = rs.getString("cvv");
 				boolean isSubmitted = rs.getBoolean("is_submitted");
+				String prodPic = rs.getString("prod_pic");
 				order = new Order(ordNo, memNo, prodNo, prodName, prodPrice, ordDt.toLocalDateTime(), cardNo, expDate,
-						cvv, isSubmitted);
+						cvv, isSubmitted, prodPic);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -128,11 +131,41 @@ public class OrderDao implements ODao<Order> {
 		}
 		return order;
 	}
+	
+	// 根據會員編號查找訂單
+	public List<Order> findByMemberId(int memNo) throws SQLException {
+	    String sql = "SELECT ord_no, mem_no, prod_no, prod_name, ord_dt, prod_price, card_no, exp_date, cvv, is_submitted, prod_pic FROM orders WHERE mem_no = ?;";
+	    List<Order> orders = new ArrayList<>();
+	    try (Connection connection = dataSource.getConnection();
+	         PreparedStatement ps = connection.prepareStatement(sql)) {
+	        ps.setInt(1, memNo);
+	        ResultSet rs = ps.executeQuery();
+	        while (rs.next()) {
+	            int ordNo = rs.getInt("ord_no");
+	            int prodNo = rs.getInt("prod_no");
+	            String prodName = rs.getString("prod_name");
+	            Timestamp ordDt = rs.getTimestamp("ord_dt");
+	            double prodPrice = rs.getDouble("prod_price");
+	            String cardNo = rs.getString("card_no");
+	            String expDate = rs.getString("exp_date");
+	            String cvv = rs.getString("cvv");
+	            boolean isSubmitted = rs.getBoolean("is_submitted");
+	            String prodPic = rs.getString("prod_pic");
+	            Order order = new Order(ordNo, memNo, prodNo, prodName, prodPrice, ordDt.toLocalDateTime(), cardNo, expDate,
+	                    cvv, isSubmitted, prodPic);
+	            orders.add(order);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
+	    return orders;
+	}
 
 	// 獲取所有訂單
 	@Override
 	public List<Order> findAll() throws SQLException {
-		String sql = "SELECT ord_no, mem_no, prod_no, prod_name, ord_dt, prod_price, card_no, exp_date, cvv, is_submitted FROM orders;";
+		String sql = "SELECT ord_no, mem_no, prod_no, prod_name, ord_dt, prod_price, card_no, exp_date, cvv, is_submitted, prod_pic FROM orders;";
 		List<Order> orders = new ArrayList<>();
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -148,8 +181,9 @@ public class OrderDao implements ODao<Order> {
 				String expDate = rs.getString("exp_date");
 				String cvv = rs.getString("cvv");
 				boolean isSubmitted = rs.getBoolean("is_submitted");
+				String prodPic = rs.getString("prod_pic");
 				Order order = new Order(ordNo, memNo, prodNo, prodName, prodPrice, ordDt.toLocalDateTime(), cardNo,
-						expDate, cvv, isSubmitted);
+						expDate, cvv, isSubmitted, prodPic);
 				orders.add(order);
 			}
 		} catch (SQLException e) {
