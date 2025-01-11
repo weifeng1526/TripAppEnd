@@ -16,6 +16,7 @@ public class Order {
     private String expDate;        // 信用卡到期日
     private String cvv;            // 信用卡 CVV
     private Boolean isSubmitted;   // 是否已提交
+    private String prodPic;        // 產品圖片 (以 byte[] 形式表示 BLOB 資料)
     
     // 無參數構造函數
     public Order() {
@@ -23,7 +24,7 @@ public class Order {
 
     // 建構子
     public Order(Integer ordNo, Integer memNo, Integer prodNo, String prodName, Double prodPrice, 
-                 LocalDateTime ordDt, String cardNo, String expDate, String cvv, Boolean isSubmitted) {
+                 LocalDateTime ordDt, String cardNo, String expDate, String cvv, Boolean isSubmitted, String prodPic) {
         this.ordNo = ordNo;
         this.memNo = memNo;
         this.prodNo = prodNo;
@@ -34,6 +35,7 @@ public class Order {
         this.expDate = expDate;
         this.cvv = cvv;
         this.isSubmitted = isSubmitted;
+        this.prodPic = prodPic;
     }
 
     // Getter 和 Setter 方法
@@ -115,5 +117,13 @@ public class Order {
 
     public void setIsSubmitted(Boolean isSubmitted) { 
         this.isSubmitted = isSubmitted; 
+    }
+
+    public String getProdPic() {
+        return prodPic;
+    }
+
+    public void setProdPic(String prodPic) {
+        this.prodPic = prodPic;
     }
 }
