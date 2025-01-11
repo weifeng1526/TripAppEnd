@@ -18,8 +18,11 @@ public interface DestDao {
 	Dest selectLastOne();
 
 	int update(Dest dest);
-//	Dest selectById(int Id);
-//
-//	
-//	int deleteById(int id);
+	
+	List<Dest> selectByMemIdAndSchId(int memId, int schId);
+	
+	//已新建的行程表id、範本行程表id
+	boolean insertByCopy(int schId, int schSampleId);
+	
+	int deleteById(int id);
 }
