@@ -78,12 +78,11 @@ public class NotesDaoImpl implements NotesDao {
 	}
 	@Override
 	public int create(Notes notes) {
-		String sql = "INSERT INTO dst_record (mem_no, dst_no, dr_text) VALUES (? ,? ,?)";
+		String sql = "INSERT INTO dst_record (mem_no, dst_no) VALUES (? ,?)";
 		try (Connection connection = ds.getConnection();
 				PreparedStatement pstmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
 				pstmt.setInt(1, notes.getMemNo());
 				pstmt.setInt(2, notes.getDstNo());
-				pstmt.setString(3, notes.getDrText()); 
 				pstmt.executeUpdate();
 				  ResultSet generatedKeys = pstmt.getGeneratedKeys();
 		            if (generatedKeys.next()) {

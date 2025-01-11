@@ -24,6 +24,7 @@ public class GetRecordByDstNoController extends HttpServlet{
 		Gson gson = new Gson();
 		Integer getDstNo = Integer.parseInt(req.getParameter("dstNo"));
 		Integer getMemNo = Integer.parseInt(req.getParameter("memNo"));
+		System.out.println("doGet");
 		try {
 			NotesDaoImpl notesDaoImpl = new NotesDaoImpl();
 		Notes notes = notesDaoImpl.getRecordByDstNo(getDstNo, getMemNo);
