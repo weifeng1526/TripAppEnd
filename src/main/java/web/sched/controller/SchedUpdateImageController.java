@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +14,15 @@ import javax.servlet.http.Part;
 import web.sched.dao.impl.SchedDaoImpl;
 
 @WebServlet("/sched/image")
+@MultipartConfig(
+	    fileSizeThreshold = 1024 * 1024, // 1MB
+	    maxFileSize = 1024 * 1024 * 5,  // 5MB
+	    maxRequestSize = 1024 * 1024 * 10 // 10MB
+	)
 public class SchedUpdateImageController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	    // 在控制台打印操作信息
 	    System.out.println("Add Post");
 	    // 設置請求的字符編碼為 UTF-8，以正確處理非英文字符
