@@ -12,11 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import web.sched.dao.CrewDao;
 import web.sched.dao.impl.CrewDaoImpl;
-import web.sched.dao.impl.DestDaoImpl;
 import web.sched.vo.Crew;
-import web.sched.vo.Dest;
 
 @WebServlet("/sched/crew/create")
 public class CrewCreateController extends HttpServlet {
@@ -32,12 +29,12 @@ public class CrewCreateController extends HttpServlet {
 			Crew crew = gson.fromJson(req.getReader(), Crew.class);
 			int isInserted = crewDaoImpl.insert(crew);
 			if (isInserted > 0) {
-				System.out.println("POST: Dest創建成功: " + isInserted);
+				System.out.println("POST: Crew創建成功: " + isInserted);
 			} else {
-				System.out.println("POST: Dest創建失敗");
+				System.out.println("POST: Crew創建失敗");
 			}
 			resp.getWriter().write(gson.toJson(crew));
-		} catch (NamingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
