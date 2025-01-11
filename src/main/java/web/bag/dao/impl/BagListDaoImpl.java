@@ -58,4 +58,52 @@ public class BagListDaoImpl implements BagListDao {
 			throw new NamingException("Database error: " + e.getMessage());
 		}
 	}
+
+	@Override
+	public List<BagList> getBagListByMemNoAndSchNo(int memNo, int schNo) {
+		List<BagList> bagList = new ArrayList<>();
+		String sql = "SELECT * FROM bag_list WHERE bl_memno = ? AND bl_schno = ?";
+		try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, memNo);
+			ps.setInt(2, schNo);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				BagList bag = new BagList();
+				bag.setMemno(rs.getInt("bl_memno"));
+				bag.setSchno(rs.getInt("bl_schno"));
+				bag.setItemno(rs.getInt("bl_itemno"));
+				bag.setReady(rs.getBoolean("bl_ready"));
+				bagList.add(bag);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return bagList;
+	}
+
+	@Override
+	public List<BagList> getBagListBySchNo(int schNo) {
+		List<BagList> bagList = new ArrayList<>();
+		 String sql = "SELECT bl.bl_memno, bl.bl_schno, bl.bl_itemno, bl.bl_ready, i.item_name " +
+                 "FROM bag_list bl " +
+                 "JOIN item i ON bl.bl_itemno = i.item_no " +  // 聯接條件：bag_list.bl_itemno = item.item_no
+                 "WHERE bl.bl_schno = ?";		
+		 try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, schNo); // 只設定 schNo
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				BagList bag = new BagList();
+				bag.setMemno(rs.getInt("bl_memno"));
+				bag.setSchno(rs.getInt("bl_schno"));
+				bag.setItemno(rs.getInt("bl_itemno"));
+				bag.setReady(rs.getBoolean("bl_ready"));
+				 // 新增 item_name
+	            bag.setItemName(rs.getString("item_name"));
+				bagList.add(bag);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return bagList;
+	}
 }

@@ -12,4 +12,11 @@ public interface BagListDao {
     // 查詢所有行李
 	List<BagList> selectAllbags() throws NamingException;
 
+	List<BagList> getBagListByMemNoAndSchNo(int memNo, int schNo);
+
+	List<BagList> getBagListBySchNo(int schNo);
+
+
+   
+
 }
