@@ -25,9 +25,7 @@ public class MapDaoImpl implements MapDao {
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, address);
 			try (ResultSet rs = pstmt.executeQuery()) {
-
 				return rs.next();
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

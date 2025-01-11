@@ -22,6 +22,7 @@ public class MapPlaceController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("MapPlaceController");
 		Gson gson = new Gson();
 		Map map = gson.fromJson(req.getReader(), Map.class);
 		String address = map.getPoiAdd();
