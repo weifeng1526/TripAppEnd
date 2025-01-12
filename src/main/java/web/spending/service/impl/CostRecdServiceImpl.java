@@ -107,7 +107,10 @@ public class CostRecdServiceImpl implements CostRecdService {
 	public List<Crew> FindTripName(Integer memNo) throws Exception {
 		return costRecdDao.findTripName(memNo);
 	}
-
+	@Override
+	public List<Crew> findTripCur(Integer schNo) throws Exception {
+		return costRecdDao.findTripCur(schNo);
+	}
 
 
 }

@@ -14,7 +14,6 @@ public class CostRecd {
 //		) VALUES
 	
 	
-	
 	// 消費紀錄編號
 	private Integer costNo;
 	// 行程編號

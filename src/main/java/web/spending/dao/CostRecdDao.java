@@ -16,6 +16,7 @@ public interface CostRecdDao  {
 	Integer update(CostRecd csostRecd);
 	Integer delete(Integer costNo);
 	Integer crewCount(Integer schNo);
-	CostRecd findDataOne(Integer costno) throws Exception; 
+	CostRecd findDataOne(Integer costno) throws Exception;
+	List<Crew> findTripCur(Integer schNo) throws Exception; 
 	
 }

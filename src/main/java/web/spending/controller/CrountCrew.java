@@ -18,7 +18,7 @@ import web.spending.vo.CostRecd;
 import web.spending.vo.Crew;
 import web.spending.vo.Result;
 
-@WebServlet("/spending/crountCrew")
+@WebServlet("/spending/countCrew")
 public class CrountCrew extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

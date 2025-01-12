@@ -11,6 +11,10 @@ public class Crew {
 	private Integer schNo;
 	// 行程名稱
 	private String schName;
+	// 出遊幣別
+	private String schCur;
+	// 結算幣別
+	private String crCur;
 	// 群組名稱
 //	private String crewName;
 	// 會員編號

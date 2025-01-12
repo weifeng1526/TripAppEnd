@@ -18,6 +18,7 @@ public interface CostRecdService {
 	String saveList(CostRecd costRecd);
 	Boolean deleteList(Integer costNo);
 	Integer crewNum(Integer schNo);
+	List<Crew> findTripCur(Integer schNo) throws Exception;
 
  
 }

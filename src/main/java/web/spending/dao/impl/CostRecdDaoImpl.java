@@ -62,6 +62,7 @@ public class CostRecdDaoImpl implements CostRecdDao {
 					costRecd.setSchNo(rs.getInt("sch_no"));
 					costRecd.setSchName(rs.getString("sch_name"));
 					costRecd.setCostType(rs.getByte("cr_cost_type"));
+					costRecd.setCostItem(rs.getString("cr_cost_item"));
 					costRecd.setCostPrice(rs.getDouble("cr_cost_price"));
 					costRecd.setPaidByNo(rs.getInt("cr_paid_by"));
 					costRecd.setPaidByName(rs.getString("paid_name"));
@@ -89,21 +90,33 @@ public class CostRecdDaoImpl implements CostRecdDao {
 
 	@Override
 	public Integer insert(CostRecd costRecd) {
-		String sql = "insert into cost_recd(sch_no, cr_cur_record, cr_cost_price, cr_paid_by, cr_cost_type, cr_cost_item, cr_cost_pex,cr_cost_time, cr_cur) value(?,?,?,?,?,?,?,?,?)";
-
+//		String sql = "insert into cost_recd(sch_no, cr_cost_type, cr_cost_price, cr_paid_by, cr_cost_time, cr_cur_record, cr_cost_item) value(?,?,?,?,?,?,?)";
+		String sql = "insert into cost_recd(sch_no, cr_cost_type, cr_cost_item, cr_cost_price, cr_paid_by, cr_paid_by_name, cr_cost_time, cr_cur, cr_cur_record) "
+				+ "value(?,?,?,?,?,?,?,?,?)";
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)
 
 		) {
 			pstmt.setInt(1, costRecd.getSchNo());
-			pstmt.setString(2, costRecd.getCrCurRecord());
-			pstmt.setDouble(3, costRecd.getCostPrice());
-			pstmt.setString(4, costRecd.getPaidByName());
-			pstmt.setByte(5, costRecd.getCostType());
-			pstmt.setString(6, costRecd.getCostItem());
-			pstmt.setBoolean(7, costRecd.getCostPex());
-			pstmt.setString(8, costRecd.getCrCostTime());
+			pstmt.setByte(2, costRecd.getCostType());
+			pstmt.setString(3, costRecd.getCostItem());
+			pstmt.setDouble(4, costRecd.getCostPrice());
+			pstmt.setInt(5, costRecd.getPaidByNo());
+			pstmt.setString(6, costRecd.getPaidByName());
+			pstmt.setString(7, costRecd.getCrCostTime());
+			pstmt.setString(8, costRecd.getCrCur());
+			pstmt.setString(9, costRecd.getCrCurRecord());
+			
+			
+			
+			
+			
+			
+			
+			
+
+//			pstmt.setBoolean(7, costRecd.getCostPex());
 //			pstmt.setInt(9, costRecd.getCostNo());
-			pstmt.setString(9, costRecd.getCrCur());
+//			pstmt.setString(10, costRecd.getCrCur());
 
 			// 執行
 			return pstmt.executeUpdate();
@@ -168,6 +181,7 @@ public class CostRecdDaoImpl implements CostRecdDao {
 					costRecd.setSchNo(rs.getInt("sch_no"));
 					costRecd.setSchName(rs.getString("sch_name"));
 					costRecd.setCostType(rs.getByte("cr_cost_type"));
+					costRecd.setCostItem(rs.getString("cr_cost_item"));
 					costRecd.setCostPrice(rs.getDouble("cr_cost_price"));
 					costRecd.setPaidByNo(rs.getInt("cr_paid_by"));
 					costRecd.setPaidByName(rs.getString("mem_name"));
@@ -227,7 +241,7 @@ public class CostRecdDaoImpl implements CostRecdDao {
 					crew = new Crew();
 //					crew.setCrewNo(rs.getInt("crew_no"));
 					crew.setSchNo(rs.getInt("sch_no"));
-					crew.setSchName(rs.getString("crew_name"));
+					crew.setMemName(rs.getString("mem_name"));;
 					crew.setMemNo(rs.getInt("mem_no"));
 //					crew.setMemName(rs.getString("mem_name"));
 					crew.setMemIcon(rs.getString("mem_icon"));
@@ -252,6 +266,8 @@ public class CostRecdDaoImpl implements CostRecdDao {
 				+ "from crew c "
 				+ "join sched s on c.sch_no = s.sch_no "
 				+ "where c.mem_no = ?";
+
+		
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
 			
 			pstmt.setInt(1, memNo);
@@ -280,7 +296,44 @@ public class CostRecdDaoImpl implements CostRecdDao {
 	
 	
 	
-	
+	@Override
+	public List<Crew> findTripCur(Integer schNo) throws Exception {
+		Crew crew;
+
+		
+		String sql = "select DISTINCT s.sch_no, s.sch_name, s.sch_cur, cr.cr_cur "
+				+ "from crew c "
+				+ "join sched s on c.sch_no = s.sch_no "
+				+ "join cost_recd cr on cr.sch_no = s.sch_no "
+				+ "where c.sch_no = ? ";
+		
+		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			
+			pstmt.setInt(1, schNo);
+			
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<Crew> list = new ArrayList<Crew>();
+				
+				while (rs.next()) {
+					crew = new Crew();
+					crew.setSchNo(rs.getInt("sch_no"));
+					crew.setSchName(rs.getString("sch_name"));
+					crew.setSchCur(rs.getString("sch_cur"));
+					crew.setCrCur(rs.getString("cr_cur"));
+					list.add(crew);
+				} 
+				return list;
+			} catch (Exception e) {
+				System.err.println("Database error: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+				
+		
+		
+		
+		return null;
+	}
 	
 	
 
