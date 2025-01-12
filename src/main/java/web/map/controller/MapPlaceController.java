@@ -26,13 +26,17 @@ public class MapPlaceController extends HttpServlet {
 		Gson gson = new Gson();
 		Map map = gson.fromJson(req.getReader(), Map.class);
 		String address = map.getPoiAdd();
+		String planDate =map.getDstDate();
+		String planStart = map.getDstStart();
+		String planEnd = map.getDstEnd();
+		String planInr = map.getDstInr();
 		int addPlanNumber = map.getSchNo();
 		Map selectPlace = new Map();
 		System.out.println("行程表編號:"+addPlanNumber);
 		System.out.println("收藏狀態:"+map.getPoiLike());
 		try {
 			MapService service = new MapServiceImpl();
-			selectPlace = service.placeinfoaddcheck(map, address,addPlanNumber);
+			selectPlace = service.placeinfoaddcheck(map, address,addPlanNumber,planDate,planStart,planEnd,planInr);
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
