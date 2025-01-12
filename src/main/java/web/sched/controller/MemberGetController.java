@@ -13,31 +13,31 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
-import web.sched.vo.Sched;
+import web.member.vo.TripMember;
+import web.sched.dao.impl.CrewDaoImpl;
+import web.sched.dao.impl.PoiDaoImpl;
+import web.sched.vo.Poi;
 
-import web.sched.dao.impl.SchedDaoImpl;
-
-@WebServlet("/sched/get_all")
-public class SchedGetAllController extends HttpServlet {
+@WebServlet("/sched/member/get_all")
+public class MemberGetController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("application/json; charset=UTF-8");
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		List<Sched> allSched = new ArrayList<>();
-		SchedDaoImpl schedDaoImpl;
+		List<TripMember> list = new ArrayList<>();
+		CrewDaoImpl crewDaoImpl;
 		try {
-			schedDaoImpl = new SchedDaoImpl();
-			allSched = schedDaoImpl.selectAll();
-			if (!allSched.isEmpty()) {
-				System.out.printf("GET: Sched表總共%d筆資料\r\n", allSched.size());
+			crewDaoImpl = new CrewDaoImpl();
+			list = crewDaoImpl.selectMembers();
+			if(!list.isEmpty()) {
+				System.out.printf("GET: member表總共%d筆資料\r\n", list.size());
 			} else {
-				System.out.println("GET: Sched表沒有資料\r\n");
+				System.out.println("GET: member表沒有資料\r\n");
 			}
-			resp.getWriter().write(gson.toJson(allSched));
+			resp.getWriter().write(gson.toJson(list));
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}

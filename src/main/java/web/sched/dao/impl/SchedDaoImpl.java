@@ -1,8 +1,11 @@
 package web.sched.dao.impl;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +22,9 @@ public class SchedDaoImpl implements SchedDao {
     public SchedDaoImpl() throws NamingException {
         ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/tripapp");
     }
-
+    
+    
+    
     @Override
     public int insert(Sched sched) {
         String sql = 
@@ -164,4 +169,92 @@ public class SchedDaoImpl implements SchedDao {
         }
         return -1;
     }
+
+	@Override
+	public List<Sched> selectByMemId(int id) {
+        String sql = "SELECT * FROM sched WHERE mem_no = ?";
+        List<Sched> list = new ArrayList<>();
+        try (
+            Connection conn = ds.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+        	pstmt.setInt(1, id);
+        	ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Sched sched = new Sched();
+                sched.setSchNo(rs.getInt(1));
+                sched.setMemNo(rs.getInt(2));
+                sched.setSchState(rs.getInt(3));
+                sched.setSchName(rs.getString(4));
+                sched.setSchCon(rs.getString(5));
+                sched.setSchStart(rs.getString(6));
+                sched.setSchEnd(rs.getString(7));
+                sched.setSchCur(rs.getString(8));
+                sched.setSchPic(rs.getBytes(9));
+                sched.setSchLastEdit(rs.getString(10));  // 從 ResultSet 中取值
+                list.add(sched);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+	}
+
+
+	@Override
+	public List<Sched> selectByContry(String contry) {
+        String sql = "SELECT * FROM sched WHERE sch_con = ?";
+        List<Sched> list = new ArrayList<>();
+        try (
+            Connection conn = ds.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+        	pstmt.setString(1, contry);
+        	ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Sched sched = new Sched();
+                sched.setSchNo(rs.getInt(1));
+                sched.setMemNo(rs.getInt(2));
+                sched.setSchState(rs.getInt(3));
+                sched.setSchName(rs.getString(4));
+                sched.setSchCon(rs.getString(5));
+                sched.setSchStart(rs.getString(6));
+                sched.setSchEnd(rs.getString(7));
+                sched.setSchCur(rs.getString(8));
+                sched.setSchPic(rs.getBytes(9));
+                sched.setSchLastEdit(rs.getString(10));  // 從 ResultSet 中取值
+                list.add(sched);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+	}
+
+
+
+	@Override
+	public int updateImage(InputStream imageStream) {
+	    int imageId = 0; // 初始化圖片 ID
+	    // SQL 查詢語句，用於將圖片數據插入資料庫
+	    String sql = "UPDATE sched SET sch_pic = ?";
+	    // 使用 try-with-resources 確保資源會自動關閉
+	    try (Connection conn = ds.getConnection(); // 獲取資料庫連接
+	         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // 預備執行語句，並啟用生成的主鍵
+	        // 設置 SQL 語句中的參數（圖片數據）
+	        stmt.setBlob(1, imageStream);
+	        stmt.executeUpdate(); // 執行插入操作
+	        // 獲取自動生成的圖片 ID
+	        try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	                imageId = generatedKeys.getInt(1); // 獲取生成的 ID
+	            }
+	        }
+	    } catch (SQLException e) {
+	        // 處理 SQL 異常
+	        e.printStackTrace();
+	    }
+	    // 返回圖片 ID
+	    return imageId;
+	}
 }

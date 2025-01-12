@@ -12,32 +12,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
+import web.sched.dao.impl.DestDaoImpl;
+import web.sched.dao.impl.SchedDaoImpl;
+import web.sched.vo.Dest;
 import web.sched.vo.Sched;
 
-import web.sched.dao.impl.SchedDaoImpl;
-
-@WebServlet("/sched/get_all")
-public class SchedGetAllController extends HttpServlet {
+@WebServlet("/sched/get_dests")
+public class DestGetAllBySchIdController extends HttpServlet{
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json; charset=UTF-8");
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		List<Sched> allSched = new ArrayList<>();
-		SchedDaoImpl schedDaoImpl;
+		List<Dest> destsBySchId = new ArrayList<>();
+		Gson gson = new Gson();
+		
+		DestDaoImpl destDaoImpl;
 		try {
-			schedDaoImpl = new SchedDaoImpl();
-			allSched = schedDaoImpl.selectAll();
-			if (!allSched.isEmpty()) {
-				System.out.printf("GET: Sched表總共%d筆資料\r\n", allSched.size());
+			destDaoImpl = new DestDaoImpl();
+			int getId = Integer.parseInt(req.getParameter("id")); 
+			destsBySchId = destDaoImpl.selectAllBySchId(getId);
+		
+			if(!destsBySchId.isEmpty()) {
+				System.out.printf("GET: Dest表總共%d筆資料\r\n", destsBySchId.size());
 			} else {
-				System.out.println("GET: Sched表沒有資料\r\n");
+				System.out.println("GET: Dest表沒有資料\r\n");
 			}
-			resp.getWriter().write(gson.toJson(allSched));
+			resp.getWriter().write(gson.toJson(destsBySchId));
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
