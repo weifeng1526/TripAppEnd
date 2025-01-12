@@ -41,7 +41,7 @@ public class DestGetByDateController extends HttpServlet {
 			if(!list.isEmpty()) {
 				System.out.printf("GET: Dest表的日期%s總共有%d筆資料\r\n",date, list.size());
 			} else {
-				System.out.println("GET: Dest表沒有資料\r\n");
+				System.out.printf("GET: Dest表的日期%s總共有%d筆資料\r\n",date, list.size());
 			}
 			resp.getWriter().write(gson.toJson(list));
 		} catch (NamingException e) {

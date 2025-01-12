@@ -1,5 +1,6 @@
 package web.sched.dao;
 
+import java.io.InputStream;
 import java.util.List;
 
 import web.sched.vo.Sched;
@@ -19,4 +20,7 @@ public interface SchedDao {
 	int deleteById(int id);
 	
 	List<Sched> selectByMemId(int id);
+	
+	int updateImage(InputStream imageStream);
+	
 }
