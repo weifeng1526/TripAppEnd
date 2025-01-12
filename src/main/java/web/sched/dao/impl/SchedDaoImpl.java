@@ -263,7 +263,7 @@ public class SchedDaoImpl implements SchedDao {
 
 	@Override
 	public List<Sched> selectFromCrewByMemId(int id) {
-        String sql = "SELECT * FROM sched WHERE mem_no IN (SELECT mem_no FROM crew WHERE mem_no = ?);";
+        String sql = "SELECT * FROM sched s JOIN crew c ON s.sch_no = c.sch_no WHERE c.mem_no = ? AND c.crew_ide = 1";
         List<Sched> list = new ArrayList<>();
         try (
             Connection conn = ds.getConnection();
