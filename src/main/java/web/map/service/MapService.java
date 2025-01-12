@@ -5,6 +5,6 @@ import web.map.vo.Map;
 
 public interface MapService {
 	
-Map placeinfoaddcheck(Map map,String address,int addPlanNumber);
+Map placeinfoaddcheck(Map map,String address,int addPlanNumber,String planDate, String planStart, String planEnd, String planInr);
 
 }

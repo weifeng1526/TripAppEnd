@@ -16,19 +16,19 @@ public class MapServiceImpl implements MapService {
 	}
 
 	@Override
-	public Map placeinfoaddcheck(Map map, String address,int addPlanNumber) {
+	public Map placeinfoaddcheck(Map map, String address,int addPlanNumber,String planDate, String planStart, String planEnd, String planInr) {
 		if (!mapDao.checkPlace(address)) {
 			int addPlace=mapDao.insert(map);
 			
 			
 			if (addPlace>0 && addPlanNumber>0) {
-				mapDao.inseartPlan(mapDao.search(address),addPlanNumber);
+				mapDao.inseartPlan(mapDao.search(address),addPlanNumber,planDate,planStart,planEnd,planInr);
 			}
 			return mapDao.search(address);
 		} else {
 			if (addPlanNumber>0) {
 				
-				mapDao.inseartPlan(mapDao.search(address),addPlanNumber);
+				mapDao.inseartPlan(mapDao.search(address),addPlanNumber,planDate,planStart,planEnd,planInr);
 			}
 			
 		}
