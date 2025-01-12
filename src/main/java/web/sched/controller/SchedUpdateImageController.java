@@ -2,6 +2,7 @@ package web.sched.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -24,20 +25,27 @@ public class SchedUpdateImageController extends HttpServlet {
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	    // 在控制台打印操作信息
-	    System.out.println("Add Post");
+	    System.out.println("Put!!");
 	    // 設置請求的字符編碼為 UTF-8，以正確處理非英文字符
 	    req.setCharacterEncoding("UTF-8");
 	    SchedDaoImpl schedDaoImpl;
 	    try {
 	    	schedDaoImpl = new SchedDaoImpl();
-	        Part imagePart = req.getPart("image");          // 貼文圖片部分
 	        // 初始化圖片流和圖片 ID
 	        InputStream imageStream = null;
+	    	String schIdStr = null;
+            Part schIdPart = req.getPart("schId"); // 從請求中獲取schId
+	        Part imagePart = req.getPart("image"); // 貼文圖片部分
+	        if (schIdPart != null) {
+	            // 獲取 schIdPart 的輸入流並轉換為 String
+	            schIdStr = new String(schIdPart.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+	            System.out.println(schIdStr);
+	        }
 	        int imageId = 0;
 	        // 如果有上傳圖片，處理圖片數據
-	        if (imagePart != null && imagePart.getSize() > 0) {
+	        if (imagePart != null && imagePart.getSize() > 0 && !schIdStr.isEmpty() && schIdStr != null) {
 	            imageStream = imagePart.getInputStream();                // 獲取圖片的輸入流
-	            imageId = schedDaoImpl.updateImage(imageStream); // 將圖片保存到資料庫，返回圖片 ID
+	            imageId = schedDaoImpl.updateImage(schIdStr, imageStream); // 將圖片保存到資料庫，返回圖片 ID
 	        }
 	        // 設置響應狀態為成功並回應成功信息
 	        resp.setStatus(HttpServletResponse.SC_OK);
