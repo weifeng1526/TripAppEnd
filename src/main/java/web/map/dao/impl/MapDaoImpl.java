@@ -80,15 +80,19 @@ public class MapDaoImpl implements MapDao {
 	}
 
 	@Override
-	public int inseartPlan(Map map,int addPlanNumber) {
-		String sql = "insert into dest(sch_no,poi_no,dst_name,dst_addr) values(?,?,?,?)";
+	public int inseartPlan(Map map,int addPlanNumber,String planDate, String planStart, String planEnd, String planInr, byte[] planPic) {
+		String sql = "insert into dest(sch_no,poi_no,dst_name,dst_addr,dst_date,dst_start,dst_end,dst_inr,dst_pic) values(?,?,?,?,?,?,?,?,?)";
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
 			// 填上問號
 			pstmt.setInt(1,addPlanNumber);
 			pstmt.setInt(2, map.getPoiNo());
 			pstmt.setString(3, map.getPoiName());
 			pstmt.setString(4, map.getPoiAdd());
-			
+			pstmt.setString(5, planDate);
+			pstmt.setString(6, planStart);
+			pstmt.setString(7, planEnd);
+			pstmt.setString(8, planInr);
+			pstmt.setBytes(9, planPic);
 			// 執行寫入
 			return pstmt.executeUpdate();
 		} catch (Exception e) {
