@@ -44,7 +44,6 @@ public class BagListDaoImpl implements BagListDao {
 	    }
 	}
 
-
 	@Override
 	public int delete(int memNo, int schNo, int itemNo) {
 		String sql = "DELETE FROM bag_list WHERE bl_memno = ? AND bl_schno = ? AND bl_itemno = ?";
@@ -132,7 +131,6 @@ public class BagListDaoImpl implements BagListDao {
 		return bagList;
 	}
 	
-	
 	private boolean doesMemberExist(int memNo) {
 	    String sql = "SELECT COUNT(*) FROM member WHERE mem_no = ?";
 	    try (Connection conn = ds.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -146,6 +144,26 @@ public class BagListDaoImpl implements BagListDao {
 	    }
 	    return false;  // 會員不存在
 	}
+
+
+	public boolean updateReady(int memNo, int schNo, int itemNo, boolean ready) {
+	    String sql = "UPDATE bag_list SET bl_ready = ? WHERE bl_memno = ? AND bl_schno = ? AND bl_itemno = ?";
+	    try (Connection conn = ds.getConnection(); 
+	         PreparedStatement ptst = conn.prepareStatement(sql)) {
+	        ptst.setBoolean(1, ready);
+	        ptst.setInt(2, memNo);
+	        ptst.setInt(3, schNo);
+	        ptst.setInt(4, itemNo);
+
+	        int rowsUpdated = ptst.executeUpdate();
+	        return rowsUpdated > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
+
 
 
 }

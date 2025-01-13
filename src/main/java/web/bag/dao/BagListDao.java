@@ -1,5 +1,6 @@
 package web.bag.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.naming.NamingException;
@@ -18,6 +19,9 @@ public interface BagListDao {
 	int add(BagList bagList);
 
 	int delete(int memNo, int schNo, int itemNo);
+	
+	boolean updateReady(int memNo, int schNo, int itemNo, boolean ready)throws SQLException;
+	
 
 
    
