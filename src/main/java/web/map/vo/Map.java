@@ -21,4 +21,9 @@ public class Map {
     private Time poiNbs;
     private String poiBd;
     private Integer poiLike;
+    private String dstDate;
+    private String dstStart;
+    private String dstEnd;
+    private String dstInr;
+    private byte[] dstPic;
 }
