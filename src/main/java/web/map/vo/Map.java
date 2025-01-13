@@ -25,4 +25,5 @@ public class Map {
     private String dstStart;
     private String dstEnd;
     private String dstInr;
+    private byte[] dstPic;
 }

@@ -31,12 +31,13 @@ public class MapPlaceController extends HttpServlet {
 		String planEnd = map.getDstEnd();
 		String planInr = map.getDstInr();
 		int addPlanNumber = map.getSchNo();
+		byte[] planPic=map.getDstPic();
 		Map selectPlace = new Map();
 		System.out.println("行程表編號:"+addPlanNumber);
 		System.out.println("收藏狀態:"+map.getPoiLike());
 		try {
 			MapService service = new MapServiceImpl();
-			selectPlace = service.placeinfoaddcheck(map, address,addPlanNumber,planDate,planStart,planEnd,planInr);
+			selectPlace = service.placeinfoaddcheck(map, address,addPlanNumber,planDate,planStart,planEnd,planInr,planPic);
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
