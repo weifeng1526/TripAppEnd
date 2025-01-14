@@ -1,6 +1,7 @@
 package web.spending.controller;
 
 import java.io.IOException;
+import java.sql.Connection;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
@@ -27,8 +28,14 @@ public class FindOneTripsSpendingController extends HttpServlet {
 
 			CostRecdService costRecdService = new CostRecdServiceImpl();
 			Gson gson = new Gson();
-			Integer costRecd = Integer.parseInt(req.getParameter("costNo")) ;
-			String json = gson.toJson(costRecdService.SpendingfindOne(costRecd));
+			Integer costNo = Integer.parseInt(req.getParameter("costNo")) ;
+			// 找到是誰
+		    CostRecd costRecd = costRecdService.SpendingfindOne(costNo);
+		    // 知道有幾個人
+			int crewNum = costRecdService.crewNum(costRecd.getSchNo());
+			// 把他塞回原本
+			costRecd.setCountCrew(crewNum);
+			String json = gson.toJson(costRecd);
 			
 			resp.getWriter().write(json);
 
