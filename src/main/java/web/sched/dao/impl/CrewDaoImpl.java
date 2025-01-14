@@ -50,7 +50,7 @@ public class CrewDaoImpl implements CrewDao {
 
 	@Override
 	public List<MemberInCrew> selectMemberInCrew(Integer id) {
-		String sql ="SELECT c.crew_no, c.sch_no, m.mem_no, m.mem_icon, m.mem_name, m.mem_email, c.crew_peri, c.crew_ide, c.crew_name, c.crew_invited FROM member m JOIN crew c ON m.mem_no = c.mem_no WHERE c.sch_no = ?";
+		String sql = "SELECT c.crew_no, c.sch_no, m.mem_no, m.mem_icon, m.mem_name, m.mem_email, c.crew_peri, c.crew_ide, c.crew_name, c.crew_invited FROM member m JOIN crew c ON m.mem_no = c.mem_no WHERE c.sch_no = ?";
 		List<MemberInCrew> list = new ArrayList<MemberInCrew>(); // 修正清單類型為 Crew
 		try (Connection connection = ds.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql)) {
 			pstmt.setInt(1, id);
@@ -62,7 +62,7 @@ public class CrewDaoImpl implements CrewDao {
 				memberInCrew.setSchNo(rs.getInt("sch_no"));
 				memberInCrew.setMemNo(rs.getInt("mem_no"));
 				memberInCrew.setMemIcon(rs.getBytes("m.mem_icon"));
-				memberInCrew.setMemName(rs.getString("m.mem_name"));	
+				memberInCrew.setMemName(rs.getString("m.mem_name"));
 				memberInCrew.setMemEmail(rs.getString("m.mem_email"));
 				memberInCrew.setCrewPeri(rs.getByte("crew_peri"));
 				memberInCrew.setCrewIde(rs.getByte("crew_ide"));
@@ -74,12 +74,19 @@ public class CrewDaoImpl implements CrewDao {
 			e.printStackTrace(); // 打印例外訊息
 		}
 		return list;
-	}		
+	}
 
 	@Override
 	public int deleteByMemId(Integer id) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "DELETE FROM crew WHERE crew_no = ?";
+		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			pstmt.setInt(1, id);
+			int isDeleted = pstmt.executeUpdate();
+			return isDeleted;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
 	}
 
 	@Override
@@ -111,20 +118,18 @@ public class CrewDaoImpl implements CrewDao {
 	public List<TripMember> selectMembers() {
 		String sql = "SELECT * FROM member WHERE mem_no > 0";
 		List<TripMember> list = new ArrayList<TripMember>(); // 修正清單類型為 Crew
-		try (
-			Connection connection = ds.getConnection();
-			PreparedStatement pstmt = connection.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery();		
-		) {
+		try (Connection connection = ds.getConnection();
+				PreparedStatement pstmt = connection.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery();) {
 			while (rs.next()) {
-                TripMember tripMember = new TripMember();
-                tripMember.setMemNo(rs.getInt(1));
-                tripMember.setMemEmail(rs.getString(2));
-                tripMember.setMemName(rs.getString(3));
-                tripMember.setMemPw(rs.getString(4));
-                tripMember.setMemSta(rs.getByte(5));
-                tripMember.setMemIcon(rs.getString(6));
-                list.add(tripMember);
+				TripMember tripMember = new TripMember();
+				tripMember.setMemNo(rs.getInt(1));
+				tripMember.setMemEmail(rs.getString(2));
+				tripMember.setMemName(rs.getString(3));
+				tripMember.setMemPw(rs.getString(4));
+				tripMember.setMemSta(rs.getByte(5));
+				tripMember.setMemIcon(rs.getString(6));
+				list.add(tripMember);
 			}
 		} catch (Exception e) {
 			e.printStackTrace(); // 打印例外訊息
