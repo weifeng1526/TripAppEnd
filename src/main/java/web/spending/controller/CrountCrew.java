@@ -35,7 +35,7 @@ public class CrountCrew extends HttpServlet {
 			int crewCount = costRecdService.crewNum(schNo);
 			System.out.println("count--controller--" + crewCount);
 			//write 只能輸出字串，print 可以支援比較多類型。
-			resp.getWriter().print(crewCount);
+//			resp.getWriter().print(crewCount);
 			resp.getWriter().write(String.valueOf(crewCount));
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block

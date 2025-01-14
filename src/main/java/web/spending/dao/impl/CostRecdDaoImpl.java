@@ -133,20 +133,36 @@ public class CostRecdDaoImpl implements CostRecdDao {
 //		String sql = "update cost_recd set cr_cur_record = ?,  cr_cost_price=?, cr_paid_by=?, cr_cost_type=?, cr_cost_item=?, cr_cost_pex=?,cr_cost_time=?  where cr_cost_no=?";
 //		String sql ="update cost_recd set cr_cur_record = "TWD", cr_cost_price=8000888, cr_paid_by=10, cr_cost_type=5, cr_cost_item="泡泡", cr_cost_pex=0,cr_cost_time="2023-11-23 17:00:00"  where cr_cost_no=1";
 
-		String sql = "update cost_recd set cr_cur_record = ?, cr_cost_price=?, cr_paid_by=?, cr_cost_type=?, cr_cost_item=?, cr_cost_pex=?,cr_cost_time=?  where cr_cost_no=?";
+//		String sql = "update cost_recd set cr_cur_record = ?, cr_cost_price=?, cr_paid_by=?, cr_cost_type=?, cr_cost_item=?, cr_cost_pex=?,cr_cost_time=?  where cr_cost_no=?";
 
+		String sql ="update cost_recd set sch_no=?, cr_cost_type=?, cr_cost_item=?, cr_cost_price=?, cr_paid_by=?, cr_paid_by_name=?, cr_cost_time=?, cr_cur=?, cr_cur_record=? where cr_cost_no=?";
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)
 
 		) {
-//			pstmt.setInt(1, costRecd.getSchNo());
-			pstmt.setString(1, costRecd.getCrCurRecord());
-			pstmt.setDouble(2, costRecd.getCostPrice());
-			pstmt.setString(3, costRecd.getPaidByName());
-			pstmt.setByte(4, costRecd.getCostType());
-			pstmt.setString(5, costRecd.getCostItem());
-			pstmt.setBoolean(6, costRecd.getCostPex());
+			
+			pstmt.setInt(1, costRecd.getSchNo());
+			pstmt.setByte(2, costRecd.getCostType());
+			pstmt.setString(3, costRecd.getCostItem());
+			pstmt.setDouble(4, costRecd.getCostPrice());
+			pstmt.setInt(5, costRecd.getPaidByNo());
+			pstmt.setString(6, costRecd.getPaidByName());
 			pstmt.setString(7, costRecd.getCrCostTime());
-			pstmt.setInt(8, costRecd.getCostNo());
+			pstmt.setString(8, costRecd.getCrCur());
+			pstmt.setString(9, costRecd.getCrCurRecord());
+			pstmt.setInt(10, costRecd.getCostNo());
+			
+//			pstmt.setInt(1, costRecd.getSchNo());
+//			pstmt.setString(1, costRecd.getCrCurRecord());
+//			pstmt.setDouble(2, costRecd.getCostPrice());
+//			pstmt.setString(3, costRecd.getPaidByName());
+//			pstmt.setByte(4, costRecd.getCostType());
+//			pstmt.setString(5, costRecd.getCostItem());
+//			pstmt.setBoolean(6, costRecd.getCostPex());
+//			pstmt.setString(7, costRecd.getCrCostTime());
+//			pstmt.setInt(8, costRecd.getCostNo());
+			
+		
+			System.out.println("有沒有更新？"+pstmt);
 
 			// 執行
 			return pstmt.executeUpdate();
@@ -184,7 +200,7 @@ public class CostRecdDaoImpl implements CostRecdDao {
 					costRecd.setCostItem(rs.getString("cr_cost_item"));
 					costRecd.setCostPrice(rs.getDouble("cr_cost_price"));
 					costRecd.setPaidByNo(rs.getInt("cr_paid_by"));
-					costRecd.setPaidByName(rs.getString("mem_name"));
+					costRecd.setPaidByName(rs.getString("cr_paid_by_name"));
 					costRecd.setCostPex(rs.getBoolean("cr_cost_pex"));
 					costRecd.setCrCurRecord(rs.getString("cr_cur_record"));
 					costRecd.setSchCur(rs.getString("sch_cur"));
@@ -208,8 +224,10 @@ public class CostRecdDaoImpl implements CostRecdDao {
 	@Override
 	public Integer delete(Integer costNo) {
 		String sql = "delete from cost_recd where cr_cost_no=?";
-		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+		try (Connection conn = ds.getConnection(); 
+				PreparedStatement pstmt = conn.prepareStatement(sql);) {
 			pstmt.setInt(1, costNo);
+
 			return pstmt.executeUpdate();
 
 		} catch (Exception e) {
