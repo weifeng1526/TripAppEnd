@@ -17,23 +17,21 @@ import web.spending.service.impl.CostRecdServiceImpl;
 public class FindTripCrewController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 
 			CostRecdService costRecdService = new CostRecdServiceImpl();
 			Gson gson = new Gson();
-			Integer findCrew = Integer.parseInt(req.getParameter("schNo")) ;
+			Integer findCrew = Integer.parseInt(req.getParameter("schNo"));
 			String json = gson.toJson(costRecdService.FindTripCrew(findCrew));
-			
+
 			resp.getWriter().write(json);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 }
