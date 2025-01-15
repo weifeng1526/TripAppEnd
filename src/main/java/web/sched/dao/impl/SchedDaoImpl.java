@@ -172,7 +172,7 @@ public class SchedDaoImpl implements SchedDao {
 
 	@Override
 	public List<Sched> selectByMemId(int id) {
-        String sql = "SELECT * FROM sched WHERE mem_no = ?";
+        String sql = "SELECT * FROM sched WHERE mem_no = ? AND sch_state = 1";
         List<Sched> list = new ArrayList<>();
         try (
             Connection conn = ds.getConnection();

@@ -77,7 +77,7 @@ public class CrewDaoImpl implements CrewDao {
 	}
 
 	@Override
-	public int deleteByMemId(Integer id) {
+	public int deleteById(Integer id) {
 		String sql = "DELETE FROM crew WHERE crew_no = ?";
 		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
 			pstmt.setInt(1, id);
@@ -135,5 +135,25 @@ public class CrewDaoImpl implements CrewDao {
 			e.printStackTrace(); // 打印例外訊息
 		}
 		return list;
+	}
+
+	@Override
+	public int update(Crew crew) {
+		String sql = "UPDATE crew SET sch_no = ?, mem_no = ?, crew_peri = ?, crew_ide = ?, crew_name = ?, crew_invited = ? WHERE crew_no = ?";
+		try (Connection conn = ds.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			pstmt.setInt(1, crew.getSchNo());
+			pstmt.setInt(2, crew.getMemNo());
+			pstmt.setByte(3, crew.getCrewPeri());
+			pstmt.setByte(4, crew.getCrewIde());
+			pstmt.setString(5, crew.getCrewName());
+			pstmt.setByte(6, crew.getCrewInvited());
+			pstmt.setInt(7, crew.getCrewNo());
+
+			int rowsUpdated = pstmt.executeUpdate();
+			return rowsUpdated;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }
