@@ -31,9 +31,9 @@ public class CrewUpdateController extends HttpServlet{
 			Crew crew = gson.fromJson(req.getReader(), Crew.class);
 			int isUpdated = crewDaoImpl.update(crew);
 			if(isUpdated > 0) {
-				System.out.println("PUT: Dest更新成功: " + crew.getCrewNo());
+				System.out.println("PUT: Crew更新成功: " + crew.getCrewNo());
 			} else {
-				System.out.println("PUT: Dest更新失敗: " + crew.getCrewNo());
+				System.out.println("PUT: Crew更新失敗: " + crew.getCrewNo());
 			}
 			resp.getWriter().write(gson.toJson(crew));
 		} catch (NamingException e) {
