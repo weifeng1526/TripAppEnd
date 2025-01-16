@@ -41,7 +41,6 @@ public class OrderDao implements ODao<Order> {
 			ps.setString(8, order.getCvv());
 			ps.setBoolean(9, order.getIsSubmitted());
 			ps.setString(10, order.getProdPic());
-//            ps.executeUpdate();
 
 			int affectedRows = ps.executeUpdate(); // 取得受影響的列數
 			
