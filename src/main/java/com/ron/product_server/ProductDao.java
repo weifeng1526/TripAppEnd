@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,30 +24,36 @@ public class ProductDao implements PDao<Product> {
 
 	@Override
 	public void insert(Product product) throws SQLException {
-		String sql = "insert into product (prodNo, prodName, prodDesc, prodPrice, prodSta, prodPic) values(?, ?, ?, ?, ?, ?);";
+		String sql = "insert into product (prod_name, prod_desc, prod_price, prod_sta, prod_pic) values(?, ?, ?, ?, ?);";
 		try (Connection connection = dataSource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, product.getProdNo());
-			ps.setString(2, product.getProdName());
-			ps.setString(3, product.getProdDesc());
-			ps.setInt(4, product.getProdPrice());
-			ps.setBoolean(5, product.getProdSta());
-			ps.setString(4, product.getProdPic());
+				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+			ps.setString(1, product.getProdName());
+			ps.setString(2, product.getProdDesc());
+			ps.setInt(3, product.getProdPrice());
+			ps.setBoolean(4, product.getProdSta());
+			ps.setString(5, product.getProdPic());
 			ps.executeUpdate();
-		}
-	}
+			
+			// Get the auto-generated prodNo
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int prodNo = generatedKeys.getInt(1);
+                product.setProdNo(prodNo); // Set the generated prodNo back to the product object
+            }
+        }
+    }
 
 	@Override
 	public void update(Product product) throws SQLException {
 		String sql = "update product set prod_name = ?, prod_desc = ?, prod_price = ?, prod_sta = ?, prod_pic = ? where prod_no = ?;";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, product.getProdNo());
-			ps.setString(2, product.getProdName());
-			ps.setString(3, product.getProdDesc());
-			ps.setInt(4, product.getProdPrice());
-			ps.setBoolean(5, product.getProdSta());
-			ps.setString(4, product.getProdPic());
+			ps.setString(1, product.getProdName());
+			ps.setString(2, product.getProdDesc());
+			ps.setInt(3, product.getProdPrice());
+			ps.setBoolean(4, product.getProdSta());
+			ps.setString(5, product.getProdPic());
+			ps.setInt(6, product.getProdNo());
 			ps.executeUpdate();
 		}
 	}
@@ -63,7 +70,7 @@ public class ProductDao implements PDao<Product> {
 
 	@Override
 	public Product findBy(int prodNo) throws SQLException {
-		String sql = "select prod_name = ?, prod_desc = ?, prod_price = ?, prod_sta = ?, prod_pic = ? where prod_no = ?;";
+		String sql = "select prod_name, prod_desc, prod_price, prod_sta, prod_pic from product where prod_no = ?;";
 		Product product = null;
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -105,4 +112,8 @@ public class ProductDao implements PDao<Product> {
 		} 
 		return products;
 	}
+	
+	public Product getLastInsertedProduct(Product product) throws SQLException {
+        return findBy(product.getProdNo());
+    }
 }

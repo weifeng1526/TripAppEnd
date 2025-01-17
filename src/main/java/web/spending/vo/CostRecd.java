@@ -43,6 +43,7 @@ public class CostRecd {
 	// 消費時間
 	private String crCostTime;
 	
+	private int countCrew;
 	
 	
 	

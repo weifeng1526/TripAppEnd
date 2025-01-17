@@ -27,12 +27,12 @@ public class RemoveOneTripsSpendingController extends HttpServlet {
 		Gson gson = new Gson();
 		try {
 			String costNoSt = req.getParameter("costNo");
-			System.out.println("aaastr"+costNoSt);
+//			System.out.println("aaastr"+costNoSt);
 			// 選起來右鍵 > surround with > try catch block，我要捕捉 Integer 轉型失敗的例外（
 			// NumberFormatException e ）。
 			
 			Integer costNo = Integer.parseInt(costNoSt);
-			System.out.println("bbbint"+costNo);
+//			System.out.println("bbbint"+costNo);
 			// 這行紅紅的地方，可以直接產生 NamingException e 例外。（ NamingException 實例與共時多執行緒存取不同步。）
 			CostRecdService costRecdService = new CostRecdServiceImpl();
 			result.setSuccess(costRecdService.deleteList(costNo));
