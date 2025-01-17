@@ -72,15 +72,21 @@ public class ProductService {
 	@Produces(MediaType.APPLICATION_JSON)
 	// 新增一項商品，請求的URL為 "/product"
 	public Response add(Product product) {
-		try {
-			productDao.insert(product);
-			return Response.ok(new Result(0, "Product addded successfully")).build();
-		} catch (Exception e) {
-			// 處理執行錯誤
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(new Result(0, e.getMessage()))
-                    .build();
-		}
+	    try {
+	        // 插入商品到資料庫
+	        productDao.insert(product);
+
+	        // 從資料庫中取得新插入的商品 (包含自動生成的 prodNo)
+	        Product newProduct = productDao.getLastInsertedProduct(product); // 你需要實作這個方法
+
+	        // 回傳包含新 prodNo 的 Product 物件
+	        return Response.ok(newProduct).build();
+	    } catch (Exception e) {
+	        // 處理執行錯誤
+	        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+	                .entity(new Result(1, e.getMessage())) // 建議使用非 0 的錯誤代碼
+	                .build();
+	    }
 	}
 
 	@PUT

@@ -108,33 +108,6 @@ public class OrderService {
                     .build();
         }
     }
-//    public Response add(Order order) {
-//        try {
-//            // 確保 ordNo 由後端生成
-//            order.setOrdNo(null);
-//
-//            // 如果 ordDt 為空，設置為當前時間
-//            if (order.getOrdDt() == null) {
-//                order.setOrdDt(LocalDateTime.now());
-//            }
-//            
-//            if (order.getIsSubmitted() == null) {
-//                order.setIsSubmitted(false);
-//            }
-//
-//            // 插入訂單並獲取生成的 ordNo
-//            int generatedId = orderDao.insert(order);
-//
-//            // 回傳成功訊息和生成的訂單編號
-//            return Response.ok(new Result(generatedId, "Order added successfully")).build();
-//        } catch (Exception e) {
-//            // 錯誤處理，輸出例外訊息
-//            e.printStackTrace();
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-//                    .entity(new Result(0, "Error adding order: " + e.getMessage()))
-//                    .build();
-//        }
-//    }
     
     // 更新一項訂單
     @PUT
