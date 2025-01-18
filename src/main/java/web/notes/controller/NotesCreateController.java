@@ -7,10 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.tagext.TryCatchFinally;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import web.notes.dao.impl.NotesDaoImpl;
 import web.notes.vo.Notes;	

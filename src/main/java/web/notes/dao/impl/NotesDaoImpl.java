@@ -95,6 +95,22 @@ public class NotesDaoImpl implements NotesDao {
 		        }
 		        return 0;
 		    }
+	@Override
+	public Dest getImageByDest(int dstNo) {
+		String sql = "SELECT dst_pic FROM dest WHERE dst_no = ?";
+		try (Connection connection = ds.getConnection(); PreparedStatement pstmt = connection.prepareStatement(sql);) {
+			pstmt.setInt(1, dstNo);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Dest dest = new Dest();
+				dest.setDstPic(rs.getBytes(1));
+				return dest;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	}
 
 
