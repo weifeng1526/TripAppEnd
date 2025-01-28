@@ -11,5 +11,6 @@ public interface CrewDao {
 	List<Crew> selectBySchId(Integer id);
 	List<MemberInCrew> selectMemberInCrew(Integer id);
 	List<TripMember> selectMembers();
-	int deleteByMemId(Integer id);
+	int deleteById(Integer id);
+	int update(Crew crew);
 }

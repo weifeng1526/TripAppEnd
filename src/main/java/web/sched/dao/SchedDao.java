@@ -21,6 +21,7 @@ public interface SchedDao {
 	
 	List<Sched> selectByMemId(int id);
 	
-	int updateImage(InputStream imageStream);
+	int updateImage(String schIdStr, InputStream imageStream);
 	
+	List<Sched> selectFromCrewByMemId(int id);
 }
