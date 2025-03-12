@@ -11,10 +11,10 @@ public class Sched {
     private int schState;            
     private String schName;          
     private String schCon;           
-    private String schStart;           
-    private String schEnd;             
+    private Long schStart;           
+    private Long schEnd;             
     private String schCur;           
     private byte[] schPic;
-    private String schLastEdit;
+    private Long schLastEdit;
 }
 
